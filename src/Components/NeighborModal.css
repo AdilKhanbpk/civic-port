@@ -1,0 +1,108 @@
+/* NeighborModal.css */
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;  
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+    z-index: 1000; /* Ensure the modal is on top */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+  
+  .modal.is-active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .modal-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    justify-content: center;
+  }
+  
+  .modal-content h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    justify-content: center;
+  }
+  .box{
+    width: 80%;
+  }
+  
+  .buttonss {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .buttonss button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 48%;
+  }
+  
+  .buttonss button:nth-child(1) {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .buttonss button:nth-child(2) {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .buttonss button:nth-child(1):hover {
+    background-color: #45a049;
+  }
+  
+  .buttonss button:nth-child(2):hover {
+    background-color: #c0392b;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .modal-close:focus {
+    outline: none;
+  }
+  

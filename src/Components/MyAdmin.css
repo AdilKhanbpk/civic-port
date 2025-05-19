@@ -1,0 +1,38 @@
+.adminpage{
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    display: flex;
+}
+.admin h3{
+    font-size: 3vmax;
+    margin-bottom: 5vh;
+    color: rgb(26, 134, 167);
+}
+.admin{
+    font-size: 2vmax;
+}
+.admin form .input-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+}
+
+.admin form input, .admin form button {
+    padding: 1vmax 2vmax;
+    font-size: 1.5vmax;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 4vh;
+}
+
+.admin form button {
+    margin-bottom: 0; /* Remove bottom margin for the button */
+}
+
+.admin p{
+    font-size: 2vmax;
+    color: rgb(38, 156, 192);
+    margin-top: 1vmax;
+}

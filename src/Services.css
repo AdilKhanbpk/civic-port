@@ -1,0 +1,123 @@
+.services {
+    padding: 0 7%;
+    margin-bottom: 2rem;
+}
+
+.services h1 {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    position: relative;
+    display: inline-block;
+}
+
+.box4 {
+    width: 120px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    margin-left: 0.5rem;
+    margin-bottom: 2rem;
+    border-radius: var(--border-radius-full);
+}
+
+.services p {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.hh3 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 1.5rem 0 0.5rem;
+    font-weight: 600;
+}
+
+.services p span {
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.125rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .services h1 {
+        font-size: 1.75rem;
+    }
+
+    .box4 {
+        width: 100px;
+    }
+
+    .services p {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .services p span {
+        font-size: 1rem;
+    }
+
+    .hh3 {
+        font-size: 1.35rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .services {
+        padding: 0 5%;
+    }
+
+    .services h1 {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .box4 {
+        width: 80px;
+        height: 3px;
+    }
+
+    .services p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .services p span {
+        font-size: 0.95rem;
+    }
+
+    .hh3 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .services h1 {
+        font-size: 1.35rem;
+    }
+
+    .box4 {
+        width: 70px;
+    }
+
+    .services p {
+        font-size: 0.9rem;
+    }
+
+    .services p span {
+        font-size: 0.9rem;
+    }
+
+    .hh3 {
+        font-size: 1.15rem;
+    }
+}

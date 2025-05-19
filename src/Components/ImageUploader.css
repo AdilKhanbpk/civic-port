@@ -1,0 +1,25 @@
+.image-uploader {
+    margin-bottom: 20px;
+  }
+  
+  .image-uploader p {
+    margin: 10px 0;
+  }
+  
+  .image-uploader input[type="file"] {
+    margin-bottom: 10px;
+  }
+  
+  .image-uploader button {
+    padding: 10px 20px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .image-uploader button:hover {
+    background-color: #5a6268;
+  }
+  

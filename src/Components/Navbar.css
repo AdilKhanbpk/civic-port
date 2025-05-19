@@ -1,0 +1,303 @@
+.navone {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1.5rem;
+  position: relative;
+}
+
+.nav {
+  display: flex;
+  gap: 2.5rem;
+  position: absolute;
+  right: 7vw;
+  margin-top: 0;
+  transition: var(--transition);
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  position: relative;
+  transition: var(--transition);
+  padding: 0.5rem 0;
+  letter-spacing: 0.3px;
+}
+
+.nav-button::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+  border-radius: var(--border-radius-full);
+}
+
+.nav-button:hover::after,
+.actived::after {
+  width: 100%; /* Increased from 30px to full width */
+}
+
+.nav-button:active {
+  transform: none;
+}
+
+.nav-button:focus {
+  outline: none;
+}
+
+.nav-button:hover {
+  color: var(--primary-color);
+}
+
+.actived {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.line2 {
+  margin-top: 3.5rem;
+  padding: 0 7vw;
+  margin-bottom: 0;
+}
+
+.line2 hr {
+  border: none;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.08);
+  width: 100%;
+}
+
+.navbar {
+  width: 2rem;
+  margin-right: 0;
+  display: none;
+  cursor: pointer;
+  z-index: 1100;
+  color: var(--primary-color);
+  position: absolute;
+  right: 0;
+}
+
+.navbar svg {
+  width: 100%;
+  height: auto;
+  transition: var(--transition-fast);
+}
+
+.navbar:hover svg {
+  transform: scale(1.1);
+}
+
+/* Mobile Navigation */
+@media (max-width: 768px) {
+  .nav {
+    display: none;
+  }
+
+  .navbar {
+    display: block;
+    cursor: pointer;
+    margin-top: -6vh;
+    right: 7vw;
+  }
+
+  .line2 {
+    margin-top: 20px;
+  }
+
+  .nav.show {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 0.98);
+    position: fixed;
+    right: 0;
+    top: 0;
+    gap: 1.5rem;
+    width: 70%;
+    height: 100vh;
+    padding: 6rem 2rem 2rem;
+    z-index: 1000;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    animation: slideInRight 0.3s ease-in-out;
+  }
+
+  .nav-button {
+    font-size: 18px;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: left;
+  }
+
+  /* No special styling needed for auth buttons as they use nav-button class */
+
+  /* Hide original Signin component */
+  .Buttons {
+    display: none;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Styles for the sidebar separator and auth buttons */
+.sidebar-separator {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+  margin: 1.5rem 0 1rem;
+}
+
+.auth-button {
+  font-weight: 600;
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .nav.show {
+    width: 80%;
+    padding: 5rem 1.5rem 2rem;
+  }
+
+  .nav-button {
+    font-size: 16px;
+    padding: 0.6rem 0;
+  }
+
+  .sidebar-auth-buttons .Resident,
+  .sidebar-auth-buttons .Administration {
+    font-size: 13px;
+    padding: 7px 15px;
+  }
+}
+
+/* Add these styles for the user menu */
+.user-menu-container {
+  position: relative;
+  margin-right: 7vw;
+  z-index: 1001;
+}
+
+.user-menu-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.user-menu-toggle svg {
+  width: 24px;
+  height: 24px;
+  color: var(--text-color);
+}
+
+.user-menu {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-md);
+  padding: 0.5rem 0;
+  min-width: 150px;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+.user-menu.show {
+  display: flex;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.user-menu-item {
+  padding: 0.75rem 1.25rem;
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+
+.user-menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide the three-dot menu on larger screens */
+@media (min-width: 769px) {
+  .user-menu-container {
+    display: none;
+  }
+}
+
+/* Show the three-dot menu on mobile */
+@media (max-width: 768px) {
+  .user-menu-container {
+    display: block;
+    position: absolute;
+    right: 7vw;
+    top: 0;
+  }
+
+  .navbar {
+    right: 7vw; /* Position to the right with a larger margin */
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .user-menu-container {
+    right: 5vw;
+  }
+
+  .navbar {
+    right: 5vw; /* Slightly smaller margin on very small screens */
+  }
+
+  .user-menu {
+    min-width: 130px;
+  }
+
+  .user-menu-item {
+    padding: 0.6rem 1rem;
+    font-size: 14px;
+  }
+}
+

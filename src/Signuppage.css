@@ -1,0 +1,146 @@
+.signup-container {
+  /* font-family: Arial, sans-serif; */
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  display: flex;
+  justify-content: center;
+   align-items: center;
+  height: 100vh;
+  /* margin-top: 10px; */
+  /* margin-bottom: 10px; */
+}
+
+.inner-container2 {
+  background: rgb(216, 215, 215) !important;
+  padding: 1rem  2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 450px; /* Increased width */
+  text-align: center;
+}
+
+.inner-container2 h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: bold;
+}
+.tehsil label{
+  display: flex;
+  font-weight: bold;
+}
+.tehsil select{
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #8f8d8d;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.tehsil{
+  margin-bottom: 1rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #8f8d8d;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  border-color: #817f7f;
+  outline: none;
+}
+
+/* New styles for first and last name alignment */
+.name-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name-group .form-group {
+  width: 48%; /* Make each input take up half the space */
+}
+
+.submit-button {
+  background-color: rgb(30, 120, 148);
+  color: #fff;
+  border: none;
+  padding: 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.submit-button:hover {
+  background-color: rgb(34, 197, 247);
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .inner-container2 {
+    width: 80%;
+    max-width: 600px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .inner-container2 {
+    width: 90%;
+    padding: 1.5rem;
+  }
+
+  .form-group label, .tehsil label {
+    font-size: 14px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .inner-container2 {
+    width: 95%;
+    margin-top: -15vw;
+    padding: 1.2rem;
+  }
+
+  .name-group {
+    flex-direction: column;
+  }
+
+  .name-group .form-group {
+    width: 100%;
+  }
+
+  .form-group label, .tehsil label {
+    font-size: 13px;
+  }
+
+  .form-group input, .tehsil select {
+    padding: 0.5rem;
+    font-size: 13px;
+  }
+
+  .submit-button {
+    padding: 0.5rem;
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,223 @@
+.Footer {
+    background-color: var(--bg-dark);
+    color: white;
+    padding: 3rem 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.Footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.Footer::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+}
+
+.SocialMedia {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+.Connect h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    display: inline-block;
+}
+
+.Connect h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: var(--border-radius-full);
+}
+
+.SocialMedia div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    transition: var(--transition);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.35rem 0;
+    position: relative;
+}
+
+.SocialMedia div::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--primary-light);
+    transition: var(--transition);
+}
+
+.SocialMedia div:hover::before {
+    width: 100%;
+}
+
+.SocialMedia div:hover {
+    transform: translateX(10px);
+    color: white;
+}
+
+.img {
+    width: 24px;
+    height: 24px;
+    margin-right: 1rem;
+    transition: var(--transition);
+    filter: brightness(1.2);
+}
+
+.SocialMedia h3 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+}
+
+.SocialMedia div:hover .img {
+    transform: scale(1.1);
+    filter: brightness(1.5);
+}
+
+.Copyright {
+    text-align: right;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    flex: 1;
+    width: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+.Copyright h2 {
+    margin: 0.5rem 0;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .Footer {
+        padding: 4rem 5%;
+    }
+
+    .Connect h2 {
+        font-size: 1.5rem;
+    }
+
+    .SocialMedia h3 {
+        font-size: 0.95rem;
+    }
+
+    .Copyright h2 {
+        font-size: 0.85rem;
+    }
+
+    .Footer::after {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .Footer {
+        padding: 3rem 5%;
+    }
+
+    .Connect h2 {
+        font-size: 1.35rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .Connect h2::after {
+        width: 40px;
+        height: 2px;
+        bottom: -8px;
+    }
+
+    .SocialMedia div {
+        margin-bottom: 1rem;
+    }
+
+    .SocialMedia h3 {
+        font-size: 0.9rem;
+    }
+
+    .Copyright h2 {
+        font-size: 0.8rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .Footer {
+        flex-direction: column;
+        padding: 3rem 5% 4rem;
+    }
+
+    .SocialMedia, .Copyright {
+        width: 100%;
+    }
+
+    .Copyright {
+        text-align: left;
+        margin-top: 2.5rem;
+    }
+
+    .Connect h2 {
+        font-size: 1.25rem;
+    }
+
+    .img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .SocialMedia h3 {
+        font-size: 0.85rem;
+    }
+
+    .Copyright h2 {
+        font-size: 0.75rem;
+    }
+
+    .Footer::after {
+        width: 100px;
+        height: 100px;
+    }
+}
+

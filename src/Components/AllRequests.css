@@ -1,0 +1,105 @@
+.requests-list {
+  width: 100%;
+  margin-top: 20px;
+  list-style-type: none;
+}
+
+.requests-list ul {
+  list-style-type: none;
+  width: 100%;
+
+}
+.requests-list ul li{
+  margin-right:2vw;
+  margin-left: -2vw;
+
+}
+
+.allrequests {
+  width: 100%;
+}
+
+.request-item {
+  display: flex;
+  flex-direction: row;
+  padding: 1vw;
+  border: 1px solid #ccc;
+  margin: 10px 0;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.imag, .metadata {
+  width: 48%;
+}
+
+.imag img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.metadata {
+  margin-left: 15px;
+}
+
+.metadata h3 {
+  font-size: 22px;
+  color: rgb(23, 124, 155);
+  margin-bottom: 1.3vw;
+}
+
+.status {
+  margin-bottom: 15px;
+}
+
+.status1 {
+  font-size: 22px;
+}
+
+.titleand {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.titleand h3 {
+  flex: 1;
+  font-size: 24px;
+}
+
+.titleand p {
+  font-weight: bold;
+  color: rgb(23, 124, 155);
+  margin: 0;
+}
+
+.userrequests-title{
+  margin-top: 130px;
+}
+
+@media (max-width: 600px) {
+  .request-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .imag, .metadata {
+    width: 100%;
+  }
+
+  .titleand h3 {
+    font-size: 5.5vw;
+  }
+
+  .metadata p {
+    font-size: 4vw;
+  }
+
+  .metadata strong {
+    font-size: 5vw;
+  }
+}

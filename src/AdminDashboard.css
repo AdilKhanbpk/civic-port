@@ -1,0 +1,404 @@
+:root {
+  /* Modern Color Palette - Using the colors from responsive.css */
+  --primary-color: #2563eb;       /* Royal Blue */
+  --primary-dark: #1e40af;        /* Darker Blue */
+  --primary-light: #60a5fa;       /* Lighter Blue */
+  --secondary-color: #10b981;     /* Emerald Green */
+  --secondary-dark: #059669;      /* Darker Green */
+  --accent-color: #f43f5e;        /* Rose Red */
+  --success-color: #10b981;       /* Emerald Green */
+  --warning-color: #f59e0b;       /* Amber */
+  --danger-color: #ef4444;        /* Red */
+  --text-color: #1f2937;          /* Dark Gray */
+  --text-light: #6b7280;          /* Medium Gray */
+  --text-lighter: #9ca3af;        /* Light Gray */
+  --bg-white: #ffffff;            /* White */
+  --bg-light: #f9fafb;            /* Off White */
+  --bg-gray: #f3f4f6;             /* Light Gray */
+  --bg-dark: #111827;             /* Dark Gray */
+
+  /* Design System */
+  --border-radius-sm: 4px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+
+  --box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --box-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --box-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  --transition-fast: all 0.2s ease;
+  --transition: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
+}
+
+/* Admin Dashboard Layout */
+.admin-dashboard {
+  display: flex;
+  flex-direction: row;
+  padding: 1vw 3vw;
+  gap: 3%;
+}
+
+/* Sidebar Styles */
+.admin-sidebar {
+  width: 20%;
+  height: 95vh;
+  min-width: 270px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border-radius: var(--border-radius-lg);
+  position: fixed;
+  top: 1vw;
+  left: 2vw;
+  z-index: 1000;
+  transition: var(--transition);
+  overflow-y: auto;
+  box-shadow: var(--box-shadow-md);
+}
+
+.admin-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 3px solid #ffffff;
+  padding: 10px 0;
+}
+
+.admin-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.admin-buttons-container h5 {
+  color: #dbd7d7;
+  font-size: 22px;
+  margin: 15px 0;
+  font-weight: 400;
+  text-align: center;
+}
+
+.admin-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.admin-buttons button {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: var(--border-radius);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-buttons button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: var(--transition-slow);
+}
+
+.admin-buttons button:hover::before {
+  left: 100%;
+}
+
+.admin-buttons button img {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  filter: brightness(1.2);
+}
+
+.admin-buttons button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.admin-buttons button.active {
+  background-color: var(--primary-light);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Content Area */
+.admin-content {
+  width: 75%;
+  margin-left: 295px;
+}
+
+.admin-header {
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--border-radius-lg);
+  color: white;
+  position: fixed;
+  top: 1vw;
+  right: 3vw;
+  left: 340px;
+  z-index: 900;
+  box-shadow: var(--box-shadow-md);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-header h4 {
+  font-size: 22px;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.admin-header .logout-container {
+  position: relative;
+  cursor: pointer;
+}
+
+.admin-header .logout-img {
+  width: 30px;
+  transition: var(--transition);
+}
+
+.admin-header .logout-img:hover {
+  transform: scale(1.1);
+}
+
+.admin-header .custom-tooltip {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--bg-dark);
+  color: white;
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+}
+
+.admin-header .logout-container:hover .custom-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.admin-main {
+  margin-top: 80px;
+  padding: 30px 20px;
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.admin-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+}
+
+.admin-main h3 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  color: var(--primary-color);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 8px;
+}
+
+.admin-main h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+  border-radius: 3px;
+}
+
+/* Mobile Navigation Toggle */
+.admin-nav-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1200;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.admin-nav-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow-md);
+}
+
+.admin-nav-toggle .line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  margin: 5px auto;
+  transition: var(--transition);
+  border-radius: 2px;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .admin-sidebar {
+    transform: translateX(-110%); /* Move further left to ensure it's fully hidden */
+    width: 250px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1500;
+    left: 0; /* Reset the left position to ensure it's at the edge */
+  }
+
+  .admin-sidebar.show {
+    transform: translateX(0);
+  }
+
+  .admin-content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .admin-header {
+    left: 3vw;
+    width: calc(94% - 50px);
+  }
+
+  .admin-nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .admin-nav-toggle .line {
+    margin: 3px auto;
+  }
+
+  .admin-nav-toggle.active .line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .admin-nav-toggle.active .line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .admin-nav-toggle.active .line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Add overlay when sidebar is open */
+  body:has(.admin-sidebar.show)::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1400;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 12px 15px;
+  }
+
+  .admin-header h4 {
+    font-size: 18px;
+  }
+
+  .admin-buttons button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .admin-main h3 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-sidebar {
+    width: 85%;
+  }
+
+  .admin-header {
+    width: calc(94% - 40px);
+    padding: 10px;
+  }
+
+  .admin-header h4 {
+    font-size: 16px;
+  }
+
+  .admin-buttons-container h5 {
+    font-size: 18px;
+  }
+
+  .admin-buttons button {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .admin-buttons button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+  .admin-main h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .admin-nav-toggle {
+    width: 36px;
+    height: 36px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .admin-nav-toggle .line {
+    width: 20px;
+  }
+}

@@ -1,0 +1,195 @@
+
+
+.request-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+  background-color: #f4f6f9; /* A light background to give a clean look */
+  padding: 10px; /* Extra padding for better spacing on larger screens */
+}
+.PleaseSelect{
+  margin-top: 50px;
+  font-size: 22px;
+}
+.FORMDIV{
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.form-wrapper {
+  width: 100%;
+  max-width: 800px; /* Increased max-width for better desktop display */
+  background: #fff;
+  padding:15px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Softer shadow for depth */
+  border-left: 5px solid rgb(18, 114, 18); /* Main color for accent border */
+  border-top: 5px solid rgb(18, 114, 18); /* Main color for accent border */
+}
+
+.form-heading {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  font-size: 32px;
+  color: rgb(18, 114, 18);
+  font-weight: bold;
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px; /* Adding gap for spacing between items */
+  margin-bottom: 20px;
+}
+
+.form-item {
+  width: 90%; /* This ensures two inputs fit in one line */
+}
+
+.form-item-4 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-item label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #666;
+  font-weight: 500;
+}
+
+.form-select,
+.form-input,
+.form-file,
+.form-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  color: #333;
+  background-color: #f9f9f9;
+  transition: border-color 0.3s ease;
+}
+
+.form-select:focus,
+.form-input:focus,
+.form-file:focus,
+.form-textarea:focus {
+  border-color: rgb(18, 114, 18); /* Focus effect with main color */
+  outline: none;
+}
+
+.form-textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 14px;
+  background-color: rgb(18, 114, 18);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-top: 15px;
+}
+
+.submit-button:hover {
+  background-color: #145f14;
+  transform: translateY(-3px); /* Subtle hover effect */
+}
+
+/* Adding hover and focus effects for inputs */
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover {
+  border-color: rgb(18, 114, 18);
+}
+
+
+.request-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/*.request### CSS for the Request Pages (Request.css)
+
+Here’s a CSS snippet to style the request forms uniformly:
+
+```css*/
+.request-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.request-container h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.request-container p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.request-container ul {
+  margin-bottom: 20px;
+}
+
+.request-container li {
+  margin-bottom: 5px;
+}
+
+.request-container input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.request-container button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.request-container button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Responsive behavior for smaller screens */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column; /* Stack inputs on smaller screens */
+    gap: 0;
+  }
+
+  .form-item {
+    width: 100%; /* Full width for smaller screens */
+  }
+  .FORMDIV{
+    display: flex;
+    flex-direction: column;
+  }
+}

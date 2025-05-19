@@ -1,0 +1,163 @@
+.contact {
+    padding: 0 7%;
+    margin-bottom: 2rem;
+}
+
+.contact h1 {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    position: relative;
+    display: inline-block;
+}
+
+.box5 {
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    margin-left: 0.5rem;
+    margin-bottom: 2rem;
+    border-radius: var(--border-radius-full);
+}
+
+.contact h3 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin: 1.5rem 0 0.75rem;
+    font-weight: 600;
+}
+
+.ppp {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.contact ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+    list-style-type: none;
+}
+
+.conul {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.conul strong {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.social-links {
+    display: flex;
+    margin: 1rem 0;
+}
+
+.social {
+    color: var(--primary-color);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 1.125rem;
+    margin-right: 1.5rem;
+    font-weight: 500;
+    transition: var(--transition);
+    text-decoration: none;
+}
+
+.social span {
+    position: relative;
+}
+
+.social span::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.social:hover {
+    color: var(--primary-dark);
+}
+
+.social:hover span::after {
+    width: 100%;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+    .contact h1 {
+        font-size: 1.75rem;
+    }
+
+    .box5 {
+        width: 90px;
+    }
+
+    .contact h3 {
+        font-size: 1.35rem;
+    }
+
+    .ppp, .conul, .social {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .contact {
+        padding: 0 5%;
+    }
+
+    .contact h1 {
+        font-size: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .box5 {
+        width: 80px;
+        height: 3px;
+    }
+
+    .contact h3 {
+        font-size: 1.25rem;
+        margin: 1.25rem 0 0.5rem;
+    }
+
+    .ppp, .conul, .social {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .contact ul {
+        padding-left: 1rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .contact h1 {
+        font-size: 1.35rem;
+    }
+
+    .box5 {
+        width: 70px;
+    }
+
+    .contact h3 {
+        font-size: 1.15rem;
+    }
+
+    .ppp, .conul, .social {
+        font-size: 0.9rem;
+    }
+}

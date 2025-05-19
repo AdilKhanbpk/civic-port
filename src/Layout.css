@@ -1,0 +1,58 @@
+.content {
+  margin-top: 2rem;
+  min-height: 60vh;
+  position: relative;
+}
+
+.firstpara {
+  color: var(--text-light);
+  margin-top: 0.25rem;
+  margin-left: 7.2vw;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  position: relative;
+  padding-left: 0; /* Removed padding that was creating space for the dot */
+}
+
+.firstpara::before {
+  display: none; /* Remove the red dot */
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .content {
+    margin-top: 1.5rem;
+  }
+
+  .firstpara {
+    margin-top: -8px;
+    font-size: 15px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .content {
+    margin-top: 1rem;
+  }
+
+  .firstpara {
+    margin-top: 0;
+    font-size: 14px;
+    width: auto;
+    max-width: 80%; /* Increased from 60% for better readability */
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .content {
+    margin-top: 0.5rem;
+  }
+
+  .firstpara {
+    font-size: 13px;
+    margin-left: 7vw;
+  }
+}

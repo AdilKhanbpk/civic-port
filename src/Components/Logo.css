@@ -1,0 +1,77 @@
+.mainoflogo {
+  padding-top: 1.5rem;
+  position: relative;
+}
+
+.Redbox {
+  width: 110px; /* Increased from 50px for better visibility */
+
+  height: 4px;
+  margin-left: 7vw;
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius-full);
+  transition: var(--transition);
+  position: absolute;
+  top: 1.25rem;
+  left: 0;
+}
+
+.webname {
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
+  margin-left: 7vw;
+  align-items: center;
+}
+
+.text h3 {
+  font-size: 28px;
+  color: var(--primary-color);
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.5px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+
+.text h3::before {
+  display: none; /* Remove the dot before the logo text */
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .Redbox {
+    width: 150px;
+    height: 6px;
+  }
+
+  .text h3 {
+    font-size: 32px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .Redbox {
+    width: 120px;
+    height: 5px;
+  }
+
+  .text h3 {
+    font-size: 28px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .Redbox {
+    width: 100px;
+  }
+
+  .text h3 {
+    font-size: 24px;
+  }
+}
+
+

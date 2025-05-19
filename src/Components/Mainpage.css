@@ -1,0 +1,487 @@
+.firstdiv {
+  margin: 2rem 7% 1rem;
+  position: relative;
+  text-align: center;
+}
+
+.firstdiv ul {
+  list-style: none;
+  padding: 0;
+  display: inline-block;
+}
+
+.firstdiv ul li {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  position: relative;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.firstdiv ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+  border-radius: var(--border-radius-full);
+}
+
+.line111 {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+  margin: 0.75rem 0 1.5rem;
+}
+
+.Seconddiv {
+  margin: 2.5rem 7%;
+  background-color: var(--bg-white);
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.Seconddiv::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.Seconddiv .seconddivp {
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.Seconddiv p {
+  font-size: 1.125rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+  margin-left: 0;
+}
+
+.line12 {
+  height: 1px;
+  margin: 2rem 7%;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1), transparent);
+}
+
+.thirddiv {
+  margin: 3rem 7%;
+  text-align: center;
+}
+
+.thirddiv h1 {
+  font-size: 2rem;
+  margin-bottom: 1.75rem;
+  color: var(--text-color);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.75rem;
+}
+
+.thirddiv h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: var(--border-radius-full);
+}
+
+.thirddiv h1 span {
+  color: var(--primary-color);
+  font-weight: 700;
+  position: relative;
+}
+
+.btn12 {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+.btn1, .btn2 {
+  font-size: 1rem;
+  padding: 0.75rem 1.75rem;
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn1 {
+  color: var(--primary-color);
+}
+
+.btn1::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-color);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s ease;
+  z-index: -1;
+}
+
+.btn1:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.btn2 {
+  color: var(--text-color);
+  border-color: var(--text-color);
+}
+
+.btn2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--text-color);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s ease;
+  z-index: -1;
+}
+
+.btn2:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.btn1:hover {
+  color: white;
+}
+
+.btn2:hover {
+  color: white;
+}
+
+.Forthdiv {
+  background-color: var(--bg-light);
+  display: flex;
+  gap: 3rem;
+  padding: 3rem 7%;
+  margin-top: 2.5rem;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.Forthdiv::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(16, 185, 129, 0.03) 100%);
+  z-index: 0;
+}
+
+.text11 {
+  flex: 3;
+  position: relative;
+  z-index: 1;
+}
+
+.img11 {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.img11::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-color) 100%);
+  border-radius: 50%;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.img11 img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-md);
+  transition: var(--transition);
+  transform: perspective(1000px) rotateY(5deg);
+}
+
+.img11 img:hover {
+  transform: perspective(1000px) rotateY(0);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.text11 h1 {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  display: inline-block;
+}
+
+.text11 h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: var(--border-radius-full);
+}
+
+.text11 p {
+  font-size: 1.125rem;
+  color: var(--text-light);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+/* Tablet */
+@media (max-width: 992px) {
+  .firstdiv ul li {
+    font-size: 2rem;
+    padding: 1.25rem 1.75rem;
+  }
+
+  .firstdiv ul li::before {
+    height: 30px;
+  }
+
+  .Seconddiv {
+    padding: 2.5rem;
+    margin: 4rem 5%;
+  }
+
+  .Seconddiv .seconddivp {
+    font-size: 1.5rem;
+  }
+
+  .Seconddiv p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .thirddiv h1 {
+    font-size: 2rem;
+  }
+
+  .text11 h1 {
+    font-size: 1.75rem;
+  }
+
+  .text11 p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .btn1, .btn2 {
+    font-size: 0.95rem;
+    padding: 0.7rem 1.5rem;
+  }
+
+  .img11 img {
+    max-width: 350px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .firstdiv {
+    margin: 3rem 5% 1.5rem;
+  }
+
+  .firstdiv ul li {
+    font-size: 1.75rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .firstdiv ul li::before {
+    height: 25px;
+    width: 5px;
+  }
+
+  .Seconddiv {
+    margin: 3rem 5%;
+    padding: 2rem;
+  }
+
+  .Seconddiv .seconddivp {
+    font-size: 1.35rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .Seconddiv p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .thirddiv {
+    margin: 4rem 5%;
+  }
+
+  .thirddiv h1 {
+    font-size: 1.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .thirddiv h1::after {
+    width: 60px;
+    height: 3px;
+  }
+
+  .btn12 {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+
+  .btn1, .btn2 {
+    width: 80%;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.25rem;
+  }
+
+  .Forthdiv {
+    flex-direction: column;
+    padding: 4rem 5% 3rem;
+    gap: 3rem;
+  }
+
+  .text11, .img11 {
+    flex: none;
+    width: 100%;
+  }
+
+  .text11 h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .text11 h1::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .text11 p {
+    font-size: 0.95rem;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  .img11::before {
+    width: 200px;
+    height: 200px;
+  }
+
+  .img11 img {
+    max-width: 300px;
+    transform: perspective(1000px) rotateY(0);
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .firstdiv ul li {
+    font-size: 1.5rem;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .firstdiv ul li::before {
+    height: 20px;
+    width: 4px;
+  }
+
+  .Seconddiv {
+    padding: 1.5rem;
+    margin: 2.5rem 5%;
+  }
+
+  .Seconddiv .seconddivp {
+    font-size: 1.25rem;
+  }
+
+  .Seconddiv p {
+    font-size: 0.9rem;
+  }
+
+  .thirddiv h1 {
+    font-size: 1.5rem;
+  }
+
+  .btn1, .btn2 {
+    width: 100%;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.2rem;
+  }
+
+  .Forthdiv {
+    padding: 3rem 5% 2rem;
+  }
+
+  .text11 h1 {
+    font-size: 1.35rem;
+  }
+
+  .text11 p {
+    font-size: 0.9rem;
+  }
+
+  .img11::before {
+    width: 150px;
+    height: 150px;
+  }
+
+  .img11 img {
+    max-width: 250px;
+  }
+}

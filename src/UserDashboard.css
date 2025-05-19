@@ -1,0 +1,642 @@
+
+:root {
+  /* Modern Color Palette */
+  --primary-color: #2563eb;       /* Royal Blue */
+  --primary-dark: #1e40af;        /* Darker Blue */
+  --primary-light: #60a5fa;       /* Lighter Blue */
+  --secondary-color: #10b981;     /* Emerald Green */
+  --secondary-dark: #059669;      /* Darker Green */
+  --accent-color: #f43f5e;        /* Rose Red */
+  --success-color: #10b981;       /* Emerald Green */
+  --warning-color: #f59e0b;       /* Amber */
+  --danger-color: #ef4444;        /* Red */
+  --text-color: #1f2937;          /* Dark Gray */
+  --text-light: #6b7280;          /* Medium Gray */
+  --text-lighter: #9ca3af;        /* Light Gray */
+  --bg-white: #ffffff;            /* White */
+  --bg-light: #f9fafb;            /* Off White */
+  --bg-gray: #f3f4f6;             /* Light Gray */
+  --bg-dark: #111827;             /* Dark Gray */
+
+  /* Design System */
+  --border-radius-sm: 4px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+
+  --box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --box-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --box-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  --transition-fast: all 0.2s ease;
+  --transition: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
+}
+
+/* User Dashboard Layout */
+.userdashboard {
+  display: flex;
+  flex-direction: row;
+  padding: 1vw 3vw;
+  gap: 3%;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.dashboard1 {
+  width: 20%;
+  height: 95vh;
+  min-width: 270px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border-radius: var(--border-radius-lg);
+  position: fixed;
+  top: 1vw;
+  left: 2vw;
+  z-index: 1000;
+  box-shadow: var(--box-shadow-md);
+  overflow-y: auto;
+}
+
+.Logoo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px 0;
+}
+
+.Dashbuttons1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.Dashbuttons1 h5 {
+  color: white;
+  font-size: 24px;
+  margin: 15px 0;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.Dashbuttons2 {
+  margin-top: 15px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.Dashbuttons2 button {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: none;
+  border-radius: var(--border-radius);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  width: 85%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.Dashbuttons2 button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: var(--transition-slow);
+}
+
+.Dashbuttons2 button:hover::before {
+  left: 100%;
+}
+
+.Dashbuttons2 button img {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  filter: brightness(1.2);
+}
+
+.Dashbuttons2 button:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.Dashbuttons2 button.active {
+  background-color: var(--primary-light);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Content */
+.dashboard2 {
+  width: 75%;
+  margin-left: 295px;
+}
+
+.dashboard2-1 {
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--border-radius-lg);
+  color: white;
+  position: fixed;
+  top: 1vw;
+  right: 3vw;
+  left: 340px;
+  z-index: 900;
+  box-shadow: var(--box-shadow-md);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dashboard2-1 h4 {
+  font-size: 22px;
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.dashboard2-2 {
+  margin-top: 80px;
+  padding: 30px 20px;
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+  margin-top: 80px;
+}
+
+.dashboard2-2::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+}
+
+/* Logout Button */
+.logout-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logout-img {
+  width: 30px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.logout-img:hover {
+  transform: scale(1.1);
+}
+
+.custom-tooltip {
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.logout-container:hover .custom-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Mobile Navigation Toggle */
+.user-nav-toggle {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1200;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.user-nav-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: var(--box-shadow-md);
+}
+
+.user-nav-toggle .line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: white;
+  margin: 5px auto;
+  transition: var(--transition);
+  border-radius: 2px;
+}
+
+
+.logout-container {
+  position: relative;
+  display: inline-block;
+}
+
+.logout-img {
+  cursor: pointer;
+}
+
+.custom-tooltip {
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Show the tooltip when hovering over the logout container */
+.logout-container:hover .custom-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.active {
+  background-color: var(--primary-light);
+  padding: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .dashboard1 {
+    transform: translateX(-110%);
+    width: 250px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+    z-index: 1500;
+    left: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .dashboard1.show {
+    transform: translateX(0);
+  }
+
+  .dashboard2 {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .dashboard2-1 {
+    left: 3vw;
+    width: calc(94% - 50px);
+  }
+
+  .user-nav-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .user-nav-toggle .line {
+    margin: 3px auto;
+  }
+
+  .user-nav-toggle.active .line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .user-nav-toggle.active .line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .user-nav-toggle.active .line:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Add overlay when sidebar is open */
+  body:has(.dashboard1.show)::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1400;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard2-1 h4 {
+    font-size: 18px;
+  }
+
+  .dashboard2-2 {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard1 {
+    width: 85%;
+  }
+
+  .dashboard2-1 {
+    width: calc(94% - 40px);
+    padding: 10px;
+  }
+
+  .dashboard2-1 h4 {
+    font-size: 16px;
+  }
+
+  .Dashbuttons1 h5 {
+    font-size: 18px;
+  }
+
+  .Dashbuttons2 button {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+
+  .Dashbuttons2 button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+  .user-nav-toggle {
+    width: 36px;
+    height: 36px;
+    top: 15px;
+    right: 15px;
+  }
+
+  .user-nav-toggle .line {
+    width: 20px;
+  }
+}
+
+
+
+/* *{
+    margin: 0;
+    padding: 0;
+}
+.logoandlogout{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 7vw;
+}
+
+
+.location2{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 5vw;
+}
+
+.location2 button img {
+    width: 4vmax;
+    height: 4vmax;
+    min-width: 1vmax;
+    min-height: 1vmax;
+    background-color: transparent;
+}
+.location2 button{
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.location2 h3{
+    background-color: transparent;
+    border: none;
+    margin-left: 2vmax;
+    color:black;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1.5vmax;
+    padding: 1vmax 1.5vmax;
+}
+
+.location2 button:hover{
+    background-color:rgb(38, 156, 192) ;
+}
+.location2 h3:hover{
+    background-color:rgb(38, 156, 192) ;
+    color:#ffffff ;
+}
+
+.userlocation{
+    margin: 5vw 0 ;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(38, 156, 192);
+    padding: 1vmax 9vw;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.neighbors button{
+    padding: 0.5vmax 0.6vmax;
+    font-size: 1.5vmax;
+    border: none;
+    border-radius: 0.5vmax;
+    cursor: pointer;
+}
+.neighbors button:hover{
+    background-color: #ffffff;
+    color: rgb(38, 156, 192);
+}
+
+.userlocation1 h1{
+    color: #ffffff;
+    margin-bottom: 2.5vw;
+    font-size: 4vw;
+}
+.location{
+    font-size: 2.5vw;
+    color: #a3e6fa;
+}
+.serviceprovider{
+    margin: 5vw 12vw;
+    font-size: 2.7vw;
+}
+.serviceprovider p{
+    font-size: 3vw;
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.card1{
+    background-color: #374647;
+    max-width: 550px;
+    width: 80%;
+    padding: 2vw 0;
+    border-radius: 20px 20px 0 0;
+}
+.card1 h1{
+    font-size: 3.5vw;
+    color: rgb(214, 6, 6);
+}
+.card1 h2{
+    color: #ffffff;
+    font-size: 1.8vw;
+}
+
+.card2{
+    display: flex;
+    flex-direction: column;
+    background-color: #374647;
+    margin-top: 7px;
+    max-width: 550px;
+    width: 80%;
+    padding: 2vw 0;
+    border-radius: 0 0 20px 20px;
+    text-align: left;
+    margin-bottom: 4vw;
+}
+
+.card2-1{
+   margin-left: 2vw;
+   color: #ffffff;
+}
+
+.card2-1 p{
+    font-size: 1.8vw
+}
+.card2-2 {
+    display: flex;
+    flex-direction: row;
+    gap: 2vw;
+}
+.card2-2 h3{
+    margin-left: 2vw;
+    display: flex;
+    flex-direction: row;
+    margin-top: 2vw;
+    color: #2cbad3;
+    font-size: 1.8vw;
+    cursor: pointer;
+}
+.card2-2 ul li:hover{
+    color: rgb(9, 45, 143);
+}
+.card2-2 ul li:nth-child(2) h3 , .card2-2 ul li:nth-child(1) h3{
+    color: #2cbad3;
+    text-decoration: none;
+}
+.card2-2 ul li:nth-child(2) h3:hover , .card2-2 ul li:nth-child(1) h3:hover{
+    color:rgb(9, 45, 143) ;
+    text-decoration: none;
+}
+
+
+@media (max-width:600px) {
+    .location2{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 2vw;
+        gap: 2vw;
+    }
+    .location2 button img {
+        width: 7vw;
+        height: auto;
+    }
+    .location2 h3{
+        font-size: 3vw;
+    }
+    .userlocation1 h1{
+        font-size: 7vw;
+    }
+    .userlocation1 h3{
+        font-size: 4.5vw;
+    }
+    .neighbors button{
+        font-size: 3.5vw;
+    }
+    .card1{
+        width: 80vw;
+    }
+    .card1 h1{
+        font-size: 6vw;
+    }
+    .card1 h2{
+        font-size: 3.8vw;
+    }
+    .serviceprovider{
+        font-size: 4.5vw;
+    }
+    .card2{
+        width: 80vw;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8vw;
+    }
+    .card2 p {
+        font-size: 3.5vw;
+    }
+    .card2-2 h3{
+        font-size: 4.5vw;
+    }
+    .userlocation{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 3vw;
+    }
+} */
