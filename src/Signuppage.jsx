@@ -1,10 +1,11 @@
-import React, { useState  , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Logo from './Components/Logo';
 import './Signuppage.css';
 import axios from 'axios';
 import { ClipLoader } from 'react-spinners';
-import { useNavigate } from 'react-router-dom'; 
- 
+import { useNavigate, Link } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt, FaBuilding } from 'react-icons/fa';
+
 const Signuppage = () => {
   const [formData, setFormData] = useState({
     First_Name: '',
@@ -16,24 +17,23 @@ const Signuppage = () => {
     Location: '',
   });
 
-  const[tehsils , settehsils] = useState([]);
+  const [tehsils, setTehsils] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  useEffect( () => {
-
-    const fetchtehsils =  async() => {
-      try{
-      const response = await axios.get('http://localhost:4000/api/gettehsils')
-      console.log(response.data);
-      settehsils(response.data)
-      }catch(error){
-         console.log('Error Fetching Tehsils');
+  useEffect(() => {
+    const fetchTehsils = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/gettehsils');
+        console.log(response.data);
+        setTehsils(response.data);
+      } catch (error) {
+        console.log('Error Fetching Tehsils');
       }
     };
-   fetchtehsils();
+    fetchTehsils();
   }, []);
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -48,13 +48,8 @@ const Signuppage = () => {
     try {
       const response = await axios.post('http://localhost:4000/signup', formData);
       console.log('Signup Successful', response.data);
-
-      // Store user email in localStorage
-      // localStorage.setItem('userEmail', formData.Email);
-      navigate('/signin'); // Redirect to the UserDashboard after successful signup
-
-      // Reset form data
-      setFormData({ 
+      navigate('/signin');
+      setFormData({
         First_Name: '',
         Last_Name: '',
         Email: '',
@@ -75,102 +70,142 @@ const Signuppage = () => {
   };
 
   return (
-    <div>
-      {/* <Logo /> */}
+    <div className="signup-container">
       {loading ? (
-        <ClipLoader color="#00BFFF" loading={loading} size={50} />
+        <div className="loader-container">
+          <ClipLoader color="#10b981" loading={loading} size={60} />
+        </div>
       ) : (
-        <div className="signup-container">
-          <div className="inner-container2">
-            <h2>Sign Up</h2>
-            <form className="signup-form" onSubmit={handleSubmit}>
-              <div className="name-group">
-                <div className="form-group">
-                  <label>First Name</label>
+        <div className="inner-container2">
+          <h2>Create Account</h2>
+          <form className="signup-form" onSubmit={handleSubmit}>
+            <div className="name-group">
+              <div className="form-group">
+                <label htmlFor="firstName">First Name</label>
+                <div className="input-with-icon">
+                  {/* <FaUser className="input-icon" /> */}
                   <input
+                    id="firstName"
                     type="text"
                     required
-                    placeholder="First Name"
+                    placeholder="Enter first name"
                     name="First_Name"
                     value={formData.First_Name}
                     onChange={handleChange}
                   />
                 </div>
-                <div className="form-group">
-                  <label>Last Name</label>
+              </div>
+              <div className="form-group">
+                <label htmlFor="lastName">Last Name</label>
+                <div className="input-with-icon">
+                  {/* <FaUser className="input-icon" /> */}
                   <input
+                    id="lastName"
                     type="text"
                     required
-                    placeholder="Last Name"
+                    placeholder="Enter last name"
                     name="Last_Name"
                     value={formData.Last_Name}
                     onChange={handleChange}
                   />
                 </div>
               </div>
-              <div style={{display:'flex' , flexDirection:'row' , justifyContent:'space-between' , width:'100%'}}>
-              <div className="form-group" style={{width:'48%'}}>
-                <label>Email</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="Email Address"
-                  name="Email"
-                  value={formData.Email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group" style={{width:'48%'}}>
-                <label>Contact Number</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contact Number"
-                  name="Contact_Number"
-                  value={formData.Contact_Number}
-                  onChange={handleChange}
-                />
-              </div>
+            </div>
+
+            <div className="name-group">
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <div className="input-with-icon">
+                  {/* <FaEnvelope className="input-icon" /> */}
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    placeholder="Enter email address"
+                    name="Email"
+                    value={formData.Email}
+                    onChange={handleChange}
+                  />
+                </div>
               </div>
               <div className="form-group">
-                <label>Password</label>
+                <label htmlFor="phone">Contact Number</label>
+                <div className="input-with-icon">
+                  {/* <FaPhone className="input-icon" /> */}
+                  <input
+                    id="phone"
+                    type="text"
+                    required
+                    placeholder="Enter contact number"
+                    name="Contact_Number"
+                    value={formData.Contact_Number}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Password</label>
+              <div className="input-with-icon">
+                {/* <FaLock className="input-icon" /> */}
                 <input
+                  id="password"
                   type="password"
                   required
-                  placeholder="Password"
+                  placeholder="Create a password"
                   name="Password"
                   value={formData.Password}
                   onChange={handleChange}
-                /> 
+                />
               </div>
-              <div className="tehsil">
-                <label>Tehsil</label>
+            </div>
+
+            <div className="tehsil">
+              <label htmlFor="tehsil">Tehsil</label>
+              <div className="input-with-icon">
+                {/* <FaBuilding className="input-icon" /> */}
                 <select
+                  id="tehsil"
                   required
                   name="Tehsil"
                   value={formData.Tehsil}
                   onChange={handleChange}
                 >
                   <option value="">Select Your Tehsil</option>
-                  {tehsils.map((tehsil , index) => 
-                    <option key={index} value={formData.tehsil}> {tehsil.tehsil} </option>
-                  )}
+                  {tehsils.map((tehsil, index) => (
+                    <option key={index} value={tehsil.tehsil}>
+                      {tehsil.tehsil}
+                    </option>
+                  ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label>Location</label>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="location">Location</label>
+              <div className="input-with-icon">
+                {/* <FaMapMarkerAlt className="input-icon" /> */}
                 <input
+                  id="location"
                   type="text"
                   required
-                  placeholder="Location"
+                  placeholder="Enter your location"
                   name="Location"
                   value={formData.Location}
                   onChange={handleChange}
                 />
               </div>
-              <button type="submit" className="submit-button">Sign Up</button>
-            </form>
-          </div>
+            </div>
+
+            <button type="submit" className="submit-button">
+              {loading ? 'Creating Account...' : 'Sign Up'}
+            </button>
+
+            <div className="signup-link">
+              Already have an account? <Link to="/signin">Sign In</Link>
+            </div>
+          </form>
         </div>
       )}
     </div>

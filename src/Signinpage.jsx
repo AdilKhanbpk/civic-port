@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Logo from './Components/Logo.jsx';
 import axios from 'axios';
 import './Signinpagecss.css';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 
 const Signinpage = () => {
   const [formData, setFormData] = useState({
@@ -22,12 +23,12 @@ const Signinpage = () => {
 
   useEffect(() => {  //Checks If the User Is Loggedin Already
     const token = localStorage.getItem('token');
-    if (token) {   
+    if (token) {
       navigate('/userDashboard');
     }
   }, [navigate]);
 
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,9 +37,9 @@ const Signinpage = () => {
       const response = await axios.post('http://localhost:4000/signin', formData);
       const { token, email , id } = response.data;
       localStorage.setItem('token', token); // Ensure token is stored correctly
-      localStorage.setItem('userEmail', email);  
+      localStorage.setItem('userEmail', email);
       localStorage.setItem('userId' , id)
-      navigate('/userDashboard');  
+      navigate('/userDashboard');
     } catch (error) {
       if (error.response && error.response.status === 401) {
         alert('Invalid credentials');
@@ -48,45 +49,53 @@ const Signinpage = () => {
     } finally {
       setLoading(false);
     }
-  } 
+  }
 
   return (
-    <div>
-      {/* <Logo /> */}
-      <div className="signin-container" >
-        <div className="inner-container">
-          <h2>Sign In</h2>
-          <form className="signin-form" onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label>Email</label>
+    <div className="signin-container">
+      <div className="inner-container">
+        <h2 className='innercontainer2'>Welcome Back</h2>
+        <form className="signin-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <div className="input-with-icon">
+              {/* <FaEnvelope className="input-icon" /> */}
               <input
-                type="email" 
+                id="email"
+                type="email"
                 required
-                placeholder="Email Address"
+                placeholder="Enter your email"
                 name="Email"
                 value={formData.Email}
                 onChange={handleChange}
               />
             </div>
-            <div className="form-group">
-              <label>Password</label>
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <div className="input-with-icon">
+              {/* <FaLock className="input-icon" /> */}
               <input
+                id="password"
                 type="password"
                 required
-                placeholder="Password"
+                placeholder="Enter your password"
                 name="Password"
                 value={formData.Password}
                 onChange={handleChange}
               />
             </div>
-            <button type="submit" className="submit-button">
-              {loading ? 'Signing In...' : 'Sign In'}
-            </button>
-            <div className="signup-link">
-              New here? <Link to="/signup">Sign Up</Link>
-            </div>
-          </form>
-        </div>
+          </div>
+          <div className="forgot-password">
+            {/* <Link to="#">Forgot Password?</Link> */}
+          </div>
+          <button type="submit" className="submit-button">
+            {loading ? 'Signing In...' : 'Sign In'}
+          </button>
+          <div className="signup-link">
+            Don't have an account? <Link to="/signup">Sign Up</Link>
+          </div>
+        </form>
       </div>
     </div>
   );

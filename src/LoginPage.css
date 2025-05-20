@@ -34,7 +34,7 @@
   --transition-slow: all 0.5s ease;
 }
 
-.signup-container {
+.login-page {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -45,35 +45,35 @@
   overflow: hidden;
 }
 
-.signup-container::before {
+.login-page::before {
   content: '';
   position: absolute;
   width: 300px;
   height: 300px;
-  background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
   top: -100px;
-  left: -100px;
+  right: -100px;
   border-radius: 50%;
   opacity: 0.4;
   z-index: 0;
 }
 
-.signup-container::after {
+.login-page::after {
   content: '';
   position: absolute;
   width: 250px;
   height: 250px;
-  background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+  background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
   bottom: -100px;
-  right: -100px;
+  left: -100px;
   border-radius: 50%;
   opacity: 0.3;
   z-index: 0;
 }
 
-.inner-container2 {
+.login-container {
   width: 100%;
-  max-width: 550px;
+  max-width: 450px;
   background-color: var(--bg-white);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--box-shadow-lg);
@@ -94,29 +94,36 @@
   }
 }
 
-.inner-container2 h2 {
-  background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+.login-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   color: white;
   padding: 1.5rem;
   text-align: center;
+  position: relative;
+}
+
+.login-header h2 {
   margin: 0;
   font-size: 1.75rem;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
-.signup-form {
-  display: flex;
-  flex-direction: column;
+.login-header p {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.login-form {
   padding: 2rem;
 }
 
 .form-group {
   margin-bottom: 1.5rem;
-  text-align: left;
 }
 
-.form-group label, .tehsil label {
+.form-group label {
   display: block;
   margin-bottom: 0.5rem;
   color: var(--text-color);
@@ -124,20 +131,7 @@
   font-size: 0.95rem;
 }
 
-.input-with-icon {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  color: var(--text-light);
-  font-size: 1rem;
-}
-
-.form-group input, .tehsil select {
+.form-group input {
   width: 100%;
   padding: 0.75rem 1rem;
   border: 1px solid var(--text-lighter);
@@ -147,31 +141,33 @@
   background-color: var(--bg-light);
 }
 
-.form-group input:focus, .tehsil select:focus {
+.form-group input:focus {
   outline: none;
-  border-color: var(--secondary-color);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-.tehsil {
+.forgot-password {
+  text-align: right;
   margin-bottom: 1.5rem;
 }
 
-/* Name group styles */
-.name-group {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 0;
+.forgot-password a {
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: var(--transition-fast);
 }
 
-.name-group .form-group {
-  flex: 1;
+.forgot-password a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
 }
 
-.submit-button {
+.login-button {
   width: 100%;
   padding: 0.85rem;
-  background: linear-gradient(to right, var(--secondary-color), var(--secondary-dark));
+  background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
   color: white;
   border: none;
   border-radius: var(--border-radius);
@@ -179,10 +175,11 @@
   font-weight: 500;
   cursor: pointer;
   transition: var(--transition);
-  margin-top: 0.5rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.submit-button::before {
+.login-button::before {
   content: '';
   position: absolute;
   top: 0;
@@ -193,144 +190,49 @@
   transition: var(--transition-slow);
 }
 
-.submit-button:hover::before {
+.login-button:hover::before {
   left: 100%;
 }
 
-.submit-button:hover {
+.login-button:hover {
   transform: translateY(-2px);
   box-shadow: var(--box-shadow-md);
 }
 
-.loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--box-shadow-md);
-  padding: 2rem;
+.login-footer {
+  text-align: center;
+  padding: 1rem 2rem 2rem;
+  color: var(--text-light);
 }
 
-.signup-link {
-  text-align: center;
-  margin-top: 1.5rem;
-  color: var(--text-light);
+.login-footer p {
+  margin: 0;
   font-size: 0.95rem;
 }
 
-.signup-link a {
-  color: var(--secondary-color);
+.login-footer a {
+  color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
   transition: var(--transition-fast);
-  margin-left: 0.5rem;
 }
 
-.signup-link a:hover {
-  color: var(--secondary-dark);
+.login-footer a:hover {
+  color: var(--primary-dark);
   text-decoration: underline;
 }
 
-/* Tablet */
-@media (max-width: 992px) {
-  .inner-container2 {
-    width: 90%;
-    max-width: 600px;
+/* Responsive styles */
+@media (max-width: 576px) {
+  .login-container {
+    max-width: 100%;
   }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .signup-container {
-    padding: 0;
-  }
-
-  .inner-container2 {
-    width: 100%;
-    padding: 0.5rem;
-    box-shadow: var(--box-shadow-sm);
-  }
-
-  .signup-form {
-    padding: 0.5rem;
-  }
-
-  .inner-container2 h2 {
+  
+  .login-header h2 {
     font-size: 1.5rem;
-    padding: 1rem;
   }
-
-  .form-group, .tehsil {
-    margin-bottom: 0.5rem;
-  }
-
-  .form-group label, .tehsil label {
-    font-size: 12px;
-  }
-
-  .form-group input, .tehsil select {
-    padding: 0.5rem;
-    font-size: 12px;
-  }
-
-  .name-group {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .name-group .form-group {
-    width: 100%;
-  }
-
-  .submit-button {
-    padding: 0.5rem;
-    font-size: 12px;
-    margin-top: 0.3rem;
-  }
-
-  .signup-link {
-    margin-top: 0.5rem;
-    font-size: 12px;
+  
+  .login-form {
+    padding: 1.5rem;
   }
 }
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .inner-container2 {
-    padding: 0.3rem;
-  }
-
-  .signup-form {
-    padding: 0.3rem;
-  }
-
-  .inner-container2 h2 {
-    font-size: 1.25rem;
-    padding: 0.8rem;
-  }
-
-  .form-group, .tehsil {
-    margin-bottom: 0.5rem;
-  }
-
-  .form-group label, .tehsil label {
-    font-size: 11px;
-  }
-
-  .form-group input, .tehsil select {
-    padding: 0.4rem;
-    font-size: 11px;
-  }
-
-  .submit-button {
-    padding: 0.4rem;
-    font-size: 11px;
-  }
-
-  .signup-link {
-    font-size: 11px;
-  }
-}
-
