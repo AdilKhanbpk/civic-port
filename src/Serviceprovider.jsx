@@ -86,7 +86,7 @@ const Serviceprovider = () => {
 
     return(
         <div>
-          <div className="serviceheading" style={{marginTop : '134px'}}><p>Service Providers</p></div>
+          <div className="serviceheading" style={{marginTop : '30px'}}><p>Service Providers</p></div>
             <div className="card">
           <div className="card1">
            <h1>TMA {Tehsil}</h1>
