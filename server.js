@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import mysql from 'mysql2';
+import pkg from 'pg';
+const { Pool } = pkg;
 import session from 'express-session';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
@@ -9,17 +10,30 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
+import crypto from 'crypto';
+
+// Load environment variables
+dotenv.config();
+
+// Initialize Supabase client for server-side operations
+const supabaseUrl = 'https://ooyzqrrdvaebqyectlgw.supabase.co';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9veXpxcnJkdmFlYnF5ZWN0bGd3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MTgwMTgwMiwiZXhwIjoyMDY3Mzc3ODAyfQ.bU_JbE-DtCD0o2pdE7LXg5anjGU0qEbp-liS0bnWxhw';
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const app = express();
-const PORT = 4000;
-const JWT_SECRET = "ADIIKING3344aa";
-const SECRET_KEY = "SONY123";
+const PORT = process.env.PORT || 4001;
+const JWT_SECRET = process.env.JWT_SECRET || "ADIIKING3344aa";
+const SECRET_KEY = process.env.SECRET_KEY || "SONY123";
+
 
 // Better CORS configuration
 app.use(cors({
-  origin: 'http://localhost:3000', // Your frontend URL
+  origin: ['http://localhost:4001', 'http://localhost:3000', 'https://civic-port.vercel.app'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -38,66 +52,67 @@ const __dirname = dirname(__filename);
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-// Set up database connection
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'ADIIKING34',
-  database: 'civicportal',
-});
-
-db.connect((error) => {
-  if (error) {
-    console.error('Database Connection Failed:', error);
-    return;
+// Set up Supabase PostgreSQL database connection
+const db = new Pool({
+  host: process.env.SUPABASE_HOST,
+  port: process.env.SUPABASE_PORT || 5432,
+  database: process.env.SUPABASE_DATABASE,
+  user: process.env.SUPABASE_USER,
+  password: process.env.SUPABASE_PASSWORD,
+  ssl: {
+    rejectUnauthorized: false
   }
-  console.log('Connected to the database');
 });
+
+// Test database connection
+db.connect()
+  .then(() => {
+    console.log('Connected to Supabase PostgreSQL database');
+  })
+  .catch((error) => {
+    console.error('Database Connection Failed:', error);
+  });
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-// Signin route with JWT
-app.post('/signin', (req, res) => {
-  const { Email, Password } = req.body;
-  const query = 'SELECT * FROM usersdb WHERE Email = ?';
+// Note: Signin/Signup routes removed - now handled by Supabase Auth
 
-  db.query(query, [Email], (err, result) => {
-    if (err) {
-      res.status(500).send('Internal server error');
-      return;
+// Supabase authentication middleware
+const authenticateSupabaseToken = async (req, res, next) => {
+  console.log('Auth middleware called for:', req.path);
+  const token = req.headers['authorization']?.replace('Bearer ', '');
+
+  console.log('Token received:', token ? 'Yes' : 'No');
+
+  if (!token) {
+    console.log('No token provided');
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+
+    console.log('Supabase auth result:', { user: user?.email, error: error?.message });
+
+    if (error || !user) {
+      console.log('Invalid token or user not found');
+      return res.status(401).json({ error: 'Invalid token' });
     }
-    if (result.length === 0) {
-      return res.status(401).send('Incorrect email or password.');
-    }
 
-    const user = result[0];
-    if (Password !== user.Password) {
-      return res.status(401).send('Incorrect email or password.');
-    }
-
-    // Generate JWT token
-    const token = jwt.sign({ id: user.id, email: user.Email }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token, email: user.Email , id: user.id });
-
-  });
-});
-
-//  authenticating JWT tokens
-const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1]; //extracts 'authorization' from req.header array , if present then split by one spaec
-  if (token == null) return res.sendStatus(401);              //if there is no token
-
-  //if there is a token then verifying the token
-  jwt.verify(token, JWT_SECRET, (err, user) => { //JWT secret to decode the token
-    if (err) return res.sendStatus(403);
-    req.user = user;                //the Decoded User information attached to the request as req.user
-    next();                        //for next operation
-  });
+    req.user = user;
+    console.log('Authentication successful for user:', user.email);
+    next();
+  } catch (error) {
+    console.log('Token verification failed:', error.message);
+    return res.status(401).json({ error: 'Token verification failed' });
+  }
 };
+
+// Keep old middleware for backward compatibility during migration
+const authenticateToken = authenticateSupabaseToken;
 
 app.get('/', (req, res) => {
   res.send('Welcome to the API'); // You can customize this response
@@ -108,72 +123,48 @@ app.get('/protected', authenticateToken, (req, res) => {
 });
 
 // Route to get user data by email
-app.get('/user/:email', authenticateToken, (req, res) => {
+app.get('/user/:email', authenticateToken, async (req, res) => {
   const email = req.params.email;
 
   // Query the database to get user data
-  const query = 'SELECT * FROM usersdb WHERE Email = ?';
+  const query = 'SELECT * FROM usersdb WHERE email = $1';
 
-  db.query(query, [email], (err, result) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
-    }
+  try {
+    const result = await db.query(query, [email]);
 
-    if (result.length === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
 
     // Remove sensitive information like password before sending
-    const user = {...result[0]};
-    delete user.Password;
+    const user = {...result.rows[0]};
+    delete user.password;
 
     res.json(user);
-  });
+  } catch (err) {
+    console.error('Database error:', err);
+    return res.status(500).json({ error: 'Database error' });
+  }
 });
 
 
 
 
 //Route To get Tehsils From Database To Show On Signup page
-app.get('/api/gettehsils' , (req , res) => {
-  const query = 'SELECT tehsil FROM Tehsils';
-  db.query(query , (err, result) => {
-    if(err){
-      console.error('Error Fetching Tehsils' , err)
-      res.status(500).json({error:'Error Fetching Tehsils'})
-    }else{
-      res.status(200).json(result)
-    }
-  });
+app.get('/api/gettehsils', async (req, res) => {
+  const query = 'SELECT tehsil FROM tehsils';
+
+  try {
+    const result = await db.query(query);
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Error Fetching Tehsils', err);
+    res.status(500).json({error: 'Error Fetching Tehsils'});
+  }
 });
 
 
-// Custom signup route
-app.post('/signup', (req, res) => {
-  const { First_Name, Last_Name, Email, Contact_Number, Password, Tehsil , Location } = req.body;
-
-
-  db.query('SELECT Email FROM usersdb WHERE Email = ?', [Email], (err, result) => {
-    if (err) {
-      res.status(500).send('Internal server error');
-      return;
-    }
-    if (result.length > 0) {
-      return res.status(400).send('Email already exists');
-    }
-
-    const sql = 'INSERT INTO usersdb (First_Name, Last_Name, Email, Contact_Number, Password, Tehsil, Location) VALUES (?, ?, ?, ?, ?, ?, ?)';
-    db.query(sql, [First_Name, Last_Name, Email, Contact_Number, Password, Tehsil , Location], (err, result) => {
-      if (err) {
-        res.status(500).send('Registration failed');
-        return;
-      }
-      console.log('User registered successfully:', result);
-      return res.status(200).json({ message: 'Signup successful' });
-    });
-  });
-});
+// Note: Custom signup route removed - now handled by Supabase Auth
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,68 +172,112 @@ app.post('/signup', (req, res) => {
 
 
 // Admin signup route
-app.post('/adminsignup', (req, res) => {
-  const { First_Name, Last_Name, Email, Password, Tehsil , Secret_Key } = req.body;
+app.post('/adminsignup', async (req, res) => {
+  const { First_Name, Last_Name, Email, Password, Tehsil, Secret_Key } = req.body;
 
   // Check if the secret key matches
   if (Secret_Key !== SECRET_KEY) {
     return res.status(401).send('Invalid Secret Key');
   }
 
-  db.query('SELECT Email FROM adminsdb WHERE Email = ?', [Email], (err, result) => {
-    if (err) {
-      res.status(500).send('Internal server error');
-      return;
-    }
-    if (result.length > 0) {
-      return res.status(400).send('Email already exists');
+  try {
+    console.log('Admin signup attempt:', { First_Name, Last_Name, Email, Tehsil });
+
+    // Step 1: Create user in Supabase Auth first (required for foreign key)
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+      email: Email,
+      password: Password,
+      email_confirm: true,
+      user_metadata: {
+        role: 'admin' // Mark as admin to prevent regular user profile creation
+      }
+    });
+
+    if (authError) {
+      console.error('Supabase auth error:', authError);
+      if (authError.code === 'email_exists') {
+        return res.status(400).json({ message: 'Email already exists' });
+      }
+      return res.status(500).json({
+        message: 'Failed to create admin account',
+        error: authError.message
+      });
     }
 
-    const sql = 'INSERT INTO adminsdb (First_Name, Last_Name, Email, Password , Tehsil) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [First_Name, Last_Name, Email, Password , Tehsil], (err, result) => {
-      if (err) {
-        res.status(500).send('Registration failed');
-        return;
-      }
-      console.log('Admin registered successfully:', result);
-      return res.status(201).json({ message: 'Signup successful' });
+    console.log('Admin user created in Supabase Auth:', authData.user.id);
+
+    // Step 2: Create admin profile in adminsdb
+    const insertQuery = 'INSERT INTO adminsdb (id, first_name, last_name, tehsil) VALUES ($1, $2, $3, $4) RETURNING id';
+    const result = await db.query(insertQuery, [authData.user.id, First_Name, Last_Name, Tehsil]);
+
+    console.log('Admin profile created successfully:', result.rows[0]);
+    return res.status(201).json({
+      message: 'Admin registration successful',
+      admin_id: result.rows[0].id
     });
-  });
+
+  } catch (err) {
+    console.error('Admin registration error:', err);
+    res.status(500).json({ message: 'Registration failed' });
+  }
 });
 
 
 
 
-//Admin Signin
-app.post('/adminsignin' , (req , res) => {
-  const {Email , Password} = req.body;
-  const query = 'SELECT * FROM adminsdb WHERE Email = ?';
+//Admin Signin (Updated for Supabase Auth)
+app.post('/adminsignin', async (req, res) => {
+  const { Email, Password } = req.body;
 
-  db.query (query , [Email] , (err , result ) => {
-      if(err) {
-        res.status(500).send('Internal server Error')
-        return
-      }
-      if(result.length === 0 ) {
-        res.status(401).send('Incorrect Email Or Password');
-        return
-      }
+  try {
+    console.log('Admin signin attempt:', Email);
 
-      const admin = result[0];
+    // Sign in with Supabase Auth
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      email: Email,
+      password: Password
+    });
 
-      if(Password !== admin.Password){
-        res.status(401).send('Incorrect Email Or Password')
-        return
-      }
+    if (authError) {
+      console.error('Supabase admin signin error:', authError);
+      return res.status(401).json({ message: 'Incorrect Email Or Password' });
+    }
 
-      const Token = jwt.sign({ id: admin.Admin_id, email: admin.Email , Tehsil: admin.Tehsil}, JWT_SECRET ,{ expiresIn: '1h' });
+    // Check if user is an admin by looking up in adminsdb
+    const adminQuery = 'SELECT * FROM adminsdb WHERE id = $1';
+    const adminResult = await db.query(adminQuery, [authData.user.id]);
 
-     // Send a success response
-     res.json({ success: true, Token, email: admin.Email , id : admin.Admin_id , Tehsil: admin.Tehsil});
+    if (adminResult.rows.length === 0) {
+      console.log('User is not an admin:', authData.user.email);
+      return res.status(401).json({ message: 'Access denied. Admin privileges required.' });
+    }
 
-  })
+    const admin = adminResult.rows[0];
+    console.log('Admin signin successful:', admin.id);
 
-})
+    // Create JWT token for backward compatibility
+    const Token = jwt.sign({
+      id: admin.id,
+      email: authData.user.email,
+      Tehsil: admin.tehsil,
+      role: 'admin'
+    }, JWT_SECRET, { expiresIn: '1h' });
+
+    // Send a success response
+    res.json({
+      success: true,
+      Token,
+      email: authData.user.email,
+      id: admin.id,
+      Tehsil: admin.tehsil,
+      supabase_session: authData.session
+    });
+
+  } catch (err) {
+    console.error('Admin signin error:', err);
+    res.status(500).json({ message: 'Internal server Error' });
+  }
+});
 
 //Authenticating Admin Token
 const authenticateadminToken = (req, res, next) => {
@@ -274,28 +309,28 @@ app.get('/protectedadmin', authenticateadminToken, (req, res) => {
 });
 
 // Route to get admin data by email
-app.get('/admin/:email', authenticateadminToken, (req, res) => {
+app.get('/admin/:email', authenticateadminToken, async (req, res) => {
   const email = req.params.email;
 
   // Query the database to get admin data
-  const query = 'SELECT * FROM adminsdb WHERE Email = ?';
+  const query = 'SELECT * FROM adminsdb WHERE email = $1';
 
-  db.query(query, [email], (err, result) => {
-    if (err) {
-      console.error('Database error:', err);
-      return res.status(500).json({ error: 'Database error' });
-    }
+  try {
+    const result = await db.query(query, [email]);
 
-    if (result.length === 0) {
+    if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Admin not found' });
     }
 
     // Remove sensitive information like password before sending
-    const admin = {...result[0]};
-    delete admin.Password;
+    const admin = {...result.rows[0]};
+    delete admin.password;
 
     res.json(admin);
-  });
+  } catch (err) {
+    console.error('Database error:', err);
+    return res.status(500).json({ error: 'Database error' });
+  }
 });
 
 
@@ -490,36 +525,64 @@ const upload = multer({
 app.post(
   '/newrequest',
   upload.fields([{ name: 'image', maxCount: 1 }, { name: 'document', maxCount: 1 }]),
-  (req, res) => {
+  async (req, res) => {
+    console.log('=== NEW REQUEST ROUTE HIT ===');
+    console.log('Request method:', req.method);
+    console.log('Request path:', req.path);
+    console.log('Content-Type:', req.headers['content-type']);
+
     const { issue, location, description, name, status, userId, schedule, tehsil } = req.body;
+
+    // Handle schedule field - convert "null" string to actual null
+    const scheduleValue = (schedule === 'null' || schedule === null || schedule === undefined || schedule === '') ? null : schedule;
+
+    console.log('Received request data:', {
+      issue, location, description, name, status, userId, schedule: scheduleValue, tehsil
+    });
+    console.log('Received files:', req.files);
 
     // Get image and document paths
     const imagePath = req.files['image'] ? `uploads/${req.files['image'][0].filename}` : null;
     const documentPath = req.files['document'] ? `uploads/${req.files['document'][0].filename}` : null;
 
-    // Validate required fields
-    if (!issue || !location || !description || !imagePath || !name || !userId || !schedule || !tehsil) {
-      return res.status(400).json({ message: 'All required fields must be filled.' });
+    console.log('File paths:', { imagePath, documentPath });
+
+    // Validate required fields (schedule is optional)
+    if (!issue || !location || !description || !imagePath || !name || !userId || !tehsil) {
+      const missingFields = [];
+      if (!issue) missingFields.push('issue');
+      if (!location) missingFields.push('location');
+      if (!description) missingFields.push('description');
+      if (!imagePath) missingFields.push('image');
+      if (!name) missingFields.push('name');
+      if (!userId) missingFields.push('userId');
+      if (!tehsil) missingFields.push('tehsil');
+
+      console.log('Missing required fields:', missingFields);
+      return res.status(400).json({
+        message: 'Missing required fields: ' + missingFields.join(', ')
+      });
     }
 
     // SQL query to insert the new request into the database
     const query = `
-      INSERT INTO requests (issue, location, description, image, document, name, status, userId, schedule, tehsil)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO requests (issue, location, description, image, document, name, status, user_id, schedule, tehsil)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id
     `;
 
-    // Execute the database query
-    db.query(
-      query,
-      [issue, location, description, imagePath, documentPath, name, status, userId, schedule, tehsil],
-      (err, result) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ message: 'Internal Server Error' });
-        }
-        res.status(201).json({ message: 'Request submitted successfully!' });
-      }
-    );
+    try {
+      // Execute the database query
+      const result = await db.query(
+        query,
+        [issue, location, description, imagePath, documentPath, name, status, userId, scheduleValue, tehsil]
+      );
+
+      console.log('Request submitted successfully:', result.rows[0]);
+      res.status(201).json({ message: 'Request submitted successfully!' });
+    } catch (err) {
+      console.error('Database error:', err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
   }
 );
 
@@ -531,30 +594,32 @@ app.post(
 
 // Route to get all requests from database and to show on UI
 //For user Panel
-app.get('/requests', authenticateToken, (req, res) => {
+app.get('/requests', authenticateToken, async (req, res) => {
   const sql = 'SELECT * FROM requests ORDER BY created_at DESC';
-  db.query(sql, (err, results) => {
-    if (err) {
-      res.status(500).send('Error fetching requests');
-      return;
-    }
-    res.json(results);
-  });
+
+  try {
+    const results = await db.query(sql);
+    res.json(results.rows);
+  } catch (err) {
+    console.error('Error fetching requests:', err);
+    res.status(500).send('Error fetching requests');
+  }
 });
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //Route To Get The Dropped Complaints From Database To Show On UserDashboard
 
-app.get('/api/requests/dropped' , authenticateToken , (req , res) => {
+app.get('/api/requests/dropped', authenticateToken, async (req, res) => {
   const query = "SELECT * FROM requests WHERE status = 'Dropped'";
-  db.query(query , (err , result) => {
-    if (err) {
-      res.status(500).send('Error Fetching Requests');
-      return;
-    }
-    res.json(result);
-  });
+
+  try {
+    const result = await db.query(query);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error fetching dropped requests:', err);
+    res.status(500).send('Error Fetching Requests');
+  }
 });
 
 
@@ -562,22 +627,21 @@ app.get('/api/requests/dropped' , authenticateToken , (req , res) => {
 
 //Route To Update The Request Open Or Close status and Schedule date Edited by Admin
 
-app.put('/reports/:id', (req, res) => {
+app.put('/reports/:id', async (req, res) => {
   const { id } = req.params;
   const { status, schedule } = req.body;
 
-  // Update the report in the database
-  db.query(
-    'UPDATE requests SET status = ?, schedule = ? WHERE id = ?',
-    [status, schedule, id],
-    (err, result) => {
-      if (err) {
-        res.status(500).send('Error updating the report');
-      } else {
-        res.status(200).send('Report updated successfully');
-      }
-    }
-  );
+  try {
+    // Update the report in the database
+    await db.query(
+      'UPDATE requests SET status = $1, schedule = $2 WHERE id = $3',
+      [status, schedule, id]
+    );
+    res.status(200).send('Report updated successfully');
+  } catch (err) {
+    console.error('Error updating report:', err);
+    res.status(500).send('Error updating the report');
+  }
 });
 
 
@@ -585,8 +649,8 @@ app.put('/reports/:id', (req, res) => {
 app.get('/adminrequests', authenticateadminToken, async (req, res) => {
   const admintehsil = req.admin.Tehsil; // Assuming this gets the Tehsil from the admin token
   try {
-    const [requests] = await db.promise().query('SELECT * FROM requests WHERE tehsil = ?', [admintehsil]);
-    res.json(requests);
+    const requests = await db.query('SELECT * FROM requests WHERE tehsil = $1', [admintehsil]);
+    res.json(requests.rows);
   } catch (error) {
     console.error(`Error fetching requests for ${admintehsil}:`, error);
     res.status(500).json({ message: 'Error fetching requests' });
@@ -595,20 +659,18 @@ app.get('/adminrequests', authenticateadminToken, async (req, res) => {
 
 //Route to get document request From the database
 // Serve PDF document as BLOB from database
-app.get('/download-pdf/:id', authenticateToken, (req, res) => {
+app.get('/download-pdf/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const sql = 'SELECT document FROM requests WHERE id = ?';
+  const sql = 'SELECT document FROM requests WHERE id = $1';
 
-  db.query(sql, [id], (err, results) => {
-    if (err) {
-      return res.status(400).send('Error fetching Document');
-    }
+  try {
+    const results = await db.query(sql, [id]);
 
-    if (results.length === 0) {
+    if (results.rows.length === 0) {
       return res.status(404).send('No PDF found');
     }
 
-    const pdfData = results[0].document;
+    const pdfData = results.rows[0].document;
 
     res.set({
       'Content-Type': 'application/pdf',
@@ -616,7 +678,10 @@ app.get('/download-pdf/:id', authenticateToken, (req, res) => {
     });
 
     res.send(pdfData); // Send the PDF as binary data
-  });
+  } catch (err) {
+    console.error('Error fetching document:', err);
+    return res.status(400).send('Error fetching Document');
+  }
 });
 
 
@@ -624,60 +689,62 @@ app.get('/download-pdf/:id', authenticateToken, (req, res) => {
 
 
 // Route to get the user Contact_Number from database to show on Admin Panel
-app.get('/request-contact/:userId', authenticateadminToken, (req, res) => {
+app.get('/request-contact/:userId', authenticateadminToken, async (req, res) => {
   const userId = req.params.userId;
-  const sql = 'SELECT Contact_Number FROM usersdb WHERE id = ?';
-  db.query(sql, [userId], (err, results) => {
-    if (err) {
-      console.error('Error fetching contact number:', err);
-      res.status(500).send('Error fetching contact number');
-      return;
-    }
-    if (results.length > 0) {
-      res.json({ contactNumber: results[0].Contact_Number });
+  const sql = 'SELECT contact_number FROM usersdb WHERE id = $1';
+
+  try {
+    const results = await db.query(sql, [userId]);
+
+    if (results.rows.length > 0) {
+      res.json({ contactNumber: results.rows[0].contact_number });
     } else {
       res.status(404).send('Contact not found');
     }
-  });
+  } catch (err) {
+    console.error('Error fetching contact number:', err);
+    res.status(500).send('Error fetching contact number');
+  }
 });
 
 
 
 //Route To get The Requests Reported By a Specific USer To Show On UserDashboard
 
-app.get('/user-requests/:userId', (req, res) => {
+app.get('/user-requests/:userId', async (req, res) => {
   const userId = req.params.userId;
 
-  const sql = 'SELECT * FROM requests WHERE userId = ? ORDER BY created_at DESC';
-  db.query(sql, [userId], (err, results) => {
-    if (err) {
-      console.error('Error fetching user requests:', err);
-      return res.status(500).send('Failed to fetch user requests');
-    }
+  const sql = 'SELECT * FROM requests WHERE user_id = $1 ORDER BY created_at DESC';
 
-    res.status(200).json(results);
-  });
+  try {
+    const results = await db.query(sql, [userId]);
+    res.status(200).json(results.rows);
+  } catch (err) {
+    console.error('Error fetching user requests:', err);
+    return res.status(500).send('Failed to fetch user requests');
+  }
 });
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //Route From MyAdmin To Add New Tehsil
-app.post('/api/addTehsil', (req, res) => {
+app.post('/api/addTehsil', async (req, res) => {
   const { newtehsil } = req.body;
 
-  const query = 'INSERT INTO tehsils (tehsil) VALUES (?)';
-  db.query(query, [newtehsil], (err, result) => {
-    if (err) {
-      if (err.code === 'ER_DUP_ENTRY') {
-        res.status(400).json({ error: 'Tehsil already exists' });
-      } else {
-        console.error('Error Adding The Tehsil', err);
-        res.status(500).json({ error: 'Failed To Add Tehsil' });
-      }
+  const query = 'INSERT INTO tehsils (tehsil) VALUES ($1) RETURNING id';
+
+  try {
+    const result = await db.query(query, [newtehsil]);
+    console.log('Tehsil added successfully:', result.rows[0]);
+    res.status(200).json({ message: 'Tehsil Added Successfully' });
+  } catch (err) {
+    if (err.code === '23505') { // PostgreSQL unique violation error code
+      res.status(400).json({ error: 'Tehsil already exists' });
     } else {
-      res.status(200).json({ message: 'Tehsil Added Successfully' });
+      console.error('Error Adding The Tehsil', err);
+      res.status(500).json({ error: 'Failed To Add Tehsil' });
     }
-  });
+  }
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -686,12 +753,12 @@ app.post('/api/addTehsil', (req, res) => {
 app.post('/api/sendInvite', async (req, res) => {
   const { userEmail, neighborEmail } = req.body;
 
-  // Replace with your email credentials
+  // Email configuration using environment variables
   const transporter = nodemailer.createTransport({
     service: 'gmail', // e.g., Gmail, Yahoo, Outlook
     auth: {
-      user: 'elionjohn3@gmail.com', // Your email address
-      pass: 'ADIIKING34aa@', // Your email password or app-specific password
+      user: process.env.EMAIL_USER || 'elionjohn3@gmail.com', // Your email address
+      pass: process.env.EMAIL_PASS || 'ADIIKING34aa@', // Your email password or app-specific password
     },
   });
 

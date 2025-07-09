@@ -2,86 +2,43 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { useAuth } from "./contexts/AuthContext.js";
+import { supabase } from "./supabaseClient.js";
 import './ServiceProvider.css';
 
 const Serviceprovider = () => {
     const [Tehsil , setTehsil] = useState('')
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     useEffect(() => {
-        const userEmail = localStorage.getItem('userEmail');
-        const token = localStorage.getItem('token');
+        const fetchUserTehsil = async () => {
+            if (!user) return;
 
-        if (!userEmail || !token) {
-          navigate('/signin');
-          return;
-        }
+            try {
+                // Fetch user profile from Supabase
+                const { data: profile, error } = await supabase
+                    .from('usersdb')
+                    .select('tehsil')
+                    .eq('id', user.id)
+                    .single();
 
-        // Fetch user data
-        axios.get(`http://localhost:4000/user/${userEmail}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then(response => {
-            setTehsil(response.data.Tehsil);
-            console.log(response.data);
-          })
-          .catch(error => {
-            console.error('Error fetching location and tehsil:', error);
+                if (error) throw error;
 
-            // Handle different error types
-            if (error.response) {
-              if (error.response.status === 404) {
-                alert("User not found. Please sign in again.");
-              } else if (error.response.status === 401 || error.response.status === 403) {
-                alert("Session expired. Please sign in again.");
-              } else {
-                alert("An error occurred. Please try again later.");
-              }
-            } else {
-              alert("Network error. Please check your connection.");
+                if (profile) {
+                    setTehsil(profile.tehsil);
+                    console.log('User tehsil:', profile.tehsil);
+                }
+            } catch (error) {
+                console.error('Error fetching user tehsil:', error);
             }
+        };
 
-            localStorage.removeItem('token');
-            localStorage.removeItem('userEmail');
-            navigate('/signin');
-          });
-
-        fetchProtectedData();
-      }, [navigate]);
+        fetchUserTehsil();
+    }, [user, navigate]);
 
 
-      const fetchProtectedData = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          navigate('/signin');
-          return;
-        }
-
-        try {
-          const response = await axios.get('http://localhost:4000/protected', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          console.log('Protected data:', response.data);
-        } catch (error) {
-          console.error('Error fetching protected data:', error);
-
-          // Handle different error types
-          if (error.response) {
-            if (error.response.status === 401 || error.response.status === 403) {
-              alert("Session expired. Please sign in again.");
-            }
-          }
-
-          localStorage.removeItem('token');
-          localStorage.removeItem('userEmail');
-          navigate('/signin');
-        }
-      };
+    // Remove old fetchProtectedData - no longer needed with Supabase Auth
 
 
     return(

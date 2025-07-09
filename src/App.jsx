@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext.js';
 import Home from './Home.jsx';
 import Signinpage from './Signinpage';
 import Signuppage from './Signuppage';
@@ -15,36 +16,40 @@ import About from './About';
 import Services from './Services';
 import Contact from './Contact';
 import MyAdmin from './Components/MyAdmin.jsx';
+import EmailVerification from './EmailVerified.jsx';
 import './Home.css'; // Assuming you have global styles
 
 function App() {
   return (
-    <div>
-      <Router>
-        <Routes>
-          {/* Main pages with Layout */}
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="about" element={<About />} />
-            <Route path="services" element={<Services />} />
-            <Route path="contact" element={<Contact />} />
-        
-          </Route>
+    <AuthProvider>
+      <div>
+        <Router>
+          <Routes>
+            {/* Main pages with Layout */}
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="about" element={<About />} />
+              <Route path="services" element={<Services />} />
+              <Route path="contact" element={<Contact />} />
 
-          {/* Other routes */}
-          <Route path="/signin" element={<Signinpage />} />
-          <Route path="/signup" element={<Signuppage />} />
-          <Route path="/adminsignup" element={<Adminsignup />} />
-          <Route path="/adminsignin" element={<Adminsignin />} />
-          <Route path="/userDashboard" element={<UserDashboard />} />
-          <Route path="/adminDashboard" element={<AdminDashboard />} />
-          {/* <Route path="/profile" element={<Userprofile />} /> */}
-          <Route path="/newrequest" element={<NewRequestPage />} />
-          <Route path="/allrequests" element={<ViewRequests />} />
-          <Route path='myadmin' element={<MyAdmin/>}/>
-        </Routes>
-      </Router>
-    </div>
+            </Route>
+
+            {/* Other routes */}
+            <Route path="/signin" element={<Signinpage />} />
+            <Route path="/signup" element={<Signuppage />} />
+            <Route path="/email-verification" element={<EmailVerification />} />
+            <Route path="/adminsignup" element={<Adminsignup />} />
+            <Route path="/adminsignin" element={<Adminsignin />} />
+            <Route path="/userDashboard" element={<UserDashboard />} />
+            <Route path="/adminDashboard" element={<AdminDashboard />} />
+            {/* <Route path="/profile" element={<Userprofile />} /> */}
+            <Route path="/newrequest" element={<NewRequestPage />} />
+            <Route path="/allrequests" element={<ViewRequests />} />
+            <Route path='myadmin' element={<MyAdmin/>}/>
+          </Routes>
+        </Router>
+      </div>
+    </AuthProvider>
   );
 }
 

@@ -4,8 +4,7 @@
 }
 
 .Redbox {
-  width: 110px; /* Increased from 50px for better visibility */
-
+  width: 150px; /* Increased from 50px for better visibility */
   height: 4px;
   margin-left: 7vw;
   background-color: var(--primary-color);
@@ -25,7 +24,7 @@
 }
 
 .text h3 {
-  font-size: 28px;
+  font-size: 38px;
   color: var(--primary-color);
   font-weight: 700;
   margin: 0;
@@ -42,35 +41,35 @@
 /* Tablet */
 @media (max-width: 992px) {
   .Redbox {
-    width: 150px;
+    width: 220px;
     height: 6px;
   }
 
   .text h3 {
-    font-size: 32px;
+    font-size: 35px;
   }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
   .Redbox {
-    width: 120px;
+    width: 160px;
     height: 5px;
   }
 
   .text h3 {
-    font-size: 28px;
+    font-size: 30px;
   }
 }
 
 /* Small Mobile */
 @media (max-width: 480px) {
   .Redbox {
-    width: 100px;
+    width: 120px;
   }
 
   .text h3 {
-    font-size: 24px;
+    font-size: 26px;
   }
 }
 

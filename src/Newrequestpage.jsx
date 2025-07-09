@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './NewRequestPage.css';
+import { useAuth } from './contexts/AuthContext.js';
+import { supabase } from './supabaseClient.js';
 import axios from 'axios';
 
 const NewRequestPage = () => {
@@ -9,7 +11,7 @@ const NewRequestPage = () => {
     description: '',
     imagePath: null,
     name: '',
-    status: 'open',
+    status: 'Open',
     userId: '',
     schedule: null,
     tehsil: '',
@@ -18,9 +20,10 @@ const NewRequestPage = () => {
 
   const [fullName, setFullName] = useState('');
   const [uploadedDocument, setUploadedDocument] = useState(null);
-  const [imageFile, setImageFile] = useState(null); 
+  const [imageFile, setImageFile] = useState(null);
   const [selectedRequest, setSelectedRequest] = useState('');
   const fileInputRef = useRef(null);
+  const { user, session } = useAuth();
 
   // Handle Document Upload
   const handleDocumentUpload = (file) => {
@@ -58,46 +61,47 @@ const NewRequestPage = () => {
   };
 
     useEffect(() => {
-    const fetchUserName = async () => {
-      // Retrieve the user email from localStorage
-      const userEmail = localStorage.getItem('userEmail');
-      
-      if (userEmail) {
-        try {
-          // Make a GET request to the server to fetch user data based on email
-          const response = await axios.get(`http://localhost:4000/user/${userEmail}`);
-          
-          // Log the fetched user data for debugging purposes
-          console.log("User data fetched:", response.data);
-          
-          // Destructure the response data to extract first name, last name, and user ID
-          const { First_Name, Last_Name, id , Tehsil } = response.data;
-          
-          // If the first name, last name, and user ID are all available
-          if (First_Name && Last_Name && id && Tehsil) {
-            setFullName(`${First_Name} ${Last_Name}`);
-            
-            // Update the issueData state with the user's name and ID
-            setIssueData(prevData => ({
-              ...prevData,
-              name: `${First_Name} ${Last_Name}`,
-              userId: id,
-              tehsil : Tehsil,
-            }));
-          } else {
-            // If any of the required fields are missing, log an error
-            console.error('First_Name, Last_Name, or id is missing in the response');
-          }
-        } catch (error) {
-          // Log any errors that occur during the fetch operation
-          console.error('Error fetching user name', error);
-        }
+    const fetchUserData = async () => {
+      if (!user) return;
+
+      try {
+        console.log("User from Supabase Auth:", user);
+
+        // Get user data from user metadata (stored during signup)
+        const userMetadata = user.user_metadata || {};
+        const firstName = userMetadata.first_name || '';
+        const lastName = userMetadata.last_name || '';
+        const tehsil = userMetadata.tehsil || '';
+        const location = userMetadata.location || '';
+
+        console.log("User metadata:", userMetadata);
+
+        // Update the issueData state with the user's information
+        setIssueData(prevData => ({
+          ...prevData,
+          name: `${firstName} ${lastName}`.trim(),
+          userId: user.id,
+          tehsil: tehsil,
+          location: location, // Pre-fill location if available
+        }));
+
+        setFullName(`${firstName} ${lastName}`.trim());
+
+        console.log("Updated issueData with user info:", {
+          name: `${firstName} ${lastName}`.trim(),
+          userId: user.id,
+          tehsil: tehsil,
+          location: location
+        });
+
+      } catch (error) {
+        console.error('Error setting user data:', error);
       }
     };
-  
-    // Call the function to fetch the user's name when the component mounts
-    fetchUserName();
-  }, []);
+
+    // Call the function to fetch the user's data when user is available
+    fetchUserData();
+  }, [user]);
 
   // useEffect(() => {
   //   fetchUserName();
@@ -107,6 +111,10 @@ const NewRequestPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Debug: Log the current issueData state
+    console.log('Current issueData before submission:', issueData);
+    console.log('Current user:', user);
+
     const formData = new FormData();
     formData.append('issue', issueData.issue);
     formData.append('location', issueData.location);
@@ -114,8 +122,31 @@ const NewRequestPage = () => {
     formData.append('name', issueData.name);
     formData.append('status', issueData.status);
     formData.append('userId', issueData.userId);
-    formData.append('schedule', issueData.schedule);
+    // Only append schedule if it has a valid value
+    if (issueData.schedule && issueData.schedule !== 'null' && issueData.schedule !== null) {
+      formData.append('schedule', issueData.schedule);
+    }
     formData.append('tehsil', issueData.tehsil);
+
+    // Validate required fields (schedule is optional)
+    if (!issueData.issue || !issueData.location || !issueData.description || !issueData.name || !issueData.userId || !issueData.tehsil) {
+      alert('Please fill in all required fields. Missing: ' +
+        [
+          !issueData.issue && 'Issue',
+          !issueData.location && 'Location',
+          !issueData.description && 'Description',
+          !issueData.name && 'Name',
+          !issueData.userId && 'User ID',
+          !issueData.tehsil && 'Tehsil'
+        ].filter(Boolean).join(', ')
+      );
+      return;
+    }
+
+    if (!imageFile) {
+      alert('Please select an image file.');
+      return;
+    }
 
     if (imageFile) {
       formData.append('image', imageFile); // Append image to formData
@@ -124,11 +155,25 @@ const NewRequestPage = () => {
       formData.append('document', uploadedDocument); // Append document to formData
     }
 
+    // Debug: Log what's being sent
+    console.log('FormData being sent:');
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
     try {
+      // Get the access token from Supabase session
+      const accessToken = session?.access_token;
+
+      if (!accessToken) {
+        alert('Authentication required. Please sign in again.');
+        return;
+      }
+
       const response = await axios.post('http://localhost:4000/newrequest', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -154,7 +199,14 @@ const NewRequestPage = () => {
       }
     } catch (error) {
       console.error('Error submitting request:', error);
-      alert('Failed to submit the request. Please try again.');
+      console.error('Error response:', error.response?.data);
+      console.error('Error status:', error.response?.status);
+
+      if (error.response?.data?.message) {
+        alert(`Failed to submit request: ${error.response.data.message}`);
+      } else {
+        alert('Failed to submit the request. Please try again.');
+      }
     }
   };
 

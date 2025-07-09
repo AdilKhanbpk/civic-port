@@ -1,24 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext.js';
+import { supabase } from '../supabaseClient.js';
 // import './UserReports.css';
 
 const DroppedComplaints = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user, session } = useAuth();
 
   useEffect(() => {
     const fetchDroppedRequests = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error("No token found");
-        }
+      if (!user || !session) {
+        setLoading(false);
+        return;
+      }
 
-        // Fetch dropped requests from the backend
-        const response = await axios.get('http://localhost:4000/api/requests/dropped', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setRequests(response.data);
+      try {
+        console.log('Fetching dropped requests...');
+
+        // Fetch dropped requests directly from Supabase
+        const { data, error } = await supabase
+          .from('requests')
+          .select('*')
+          .eq('status', 'Dropped')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        console.log('Fetched dropped requests:', data);
+        setRequests(data || []);
       } catch (error) {
         console.error('Error fetching dropped requests:', error);
       } finally {
@@ -27,7 +37,7 @@ const DroppedComplaints = () => {
     };
 
     fetchDroppedRequests();
-  }, []);
+  }, [user, session]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

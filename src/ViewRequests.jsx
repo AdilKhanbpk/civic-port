@@ -1,19 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './ViewRequests.css';
 import Logo from './Components/Logo';
 import AllRequests from './Components/AllRequests';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext.js';
 
 const ViewRequests = () => {
-
   const navigate = useNavigate();
+  const { signOut } = useAuth();
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userEmail');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      navigate('/');
+    }
   };
 
   return ( 

@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './AllRequests.css'; 
+import { useAuth } from '../contexts/AuthContext.js';
+import { supabase } from '../supabaseClient.js';
+import './AllRequests.css';
 
 const AllRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user, session } = useAuth();
 
   useEffect(() => {
     const fetchRequests = async () => {
-      try {
-        const usertoken = localStorage.getItem('token'); //Handling Request From User Panel
-        const admintoken = localStorage.getItem('Token') //handling Request From Admin panel
+      if (!user || !session) {
+        setLoading(false);
+        return;
+      }
 
-        const token = usertoken || admintoken;  
-        const response = await axios.get('http://localhost:4000/requests', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setRequests(response.data);
+      try {
+        console.log('Fetching all requests...');
+
+        // Fetch requests directly from Supabase
+        const { data, error } = await supabase
+          .from('requests')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        console.log('Fetched requests:', data);
+        setRequests(data || []);
       } catch (error) {
         console.error('Error fetching requests:', error);
       } finally {
@@ -27,7 +36,7 @@ const AllRequests = () => {
     };
 
     fetchRequests();
-  }, []);
+  }, [user, session]);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -57,7 +66,7 @@ const AllRequests = () => {
                     <h3>{request.issue}</h3>
                     <p className='status' style={{
                       color:
-                        request.status === 'open' ? 'rgb(201, 72, 12)' :
+                        request.status === 'Open' ? 'rgb(201, 72, 12)' :
                         request.status === 'Dropped' ? 'red' : 'green',
                       fontSize: '22px',
                       fontWeight: 'bold',

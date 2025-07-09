@@ -57,12 +57,20 @@ fetchtehsils();
         Secret_Key: ''
       });
     } catch (error) {
+      console.error('Admin signup error:', error);
+      console.error('Error response:', error.response?.data);
+
       if (error.response && error.response.status === 401) {
         alert('Invalid Secret Key');
       } else if (error.response && error.response.status === 400) {
-        alert('Email already exists');
+        const message = error.response.data?.message || 'Email already exists';
+        alert(message);
+      } else if (error.response && error.response.status === 500) {
+        const message = error.response.data?.message || 'Server error during registration';
+        alert(`Server Error: ${message}`);
       } else {
-        alert('Admin Signup Failed');
+        const message = error.response?.data?.message || 'Admin Signup Failed';
+        alert(message);
       }
     }
   };

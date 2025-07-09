@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Logo from './Components/Logo';
 import './Signuppage.css';
-import axios from 'axios';
+import { supabase } from './supabaseClient.js';
+import { useAuth } from './contexts/AuthContext.js';
 import { ClipLoader } from 'react-spinners';
 import { useNavigate, Link } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock, FaPhone, FaMapMarkerAlt, FaBuilding } from 'react-icons/fa';
@@ -19,16 +20,23 @@ const Signuppage = () => {
 
   const [tehsils, setTehsils] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const { signUp } = useAuth();
 
   useEffect(() => {
     const fetchTehsils = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/api/gettehsils');
-        console.log(response.data);
-        setTehsils(response.data);
+        const { data, error } = await supabase
+          .from('tehsils')
+          .select('tehsil');
+
+        if (error) throw error;
+
+        console.log(data);
+        setTehsils(data);
       } catch (error) {
-        console.log('Error Fetching Tehsils');
+        console.log('Error Fetching Tehsils:', error.message);
       }
     };
     fetchTehsils();
@@ -45,10 +53,29 @@ const Signuppage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setMessage('');
+
     try {
-      const response = await axios.post('http://localhost:4000/signup', formData);
-      console.log('Signup Successful', response.data);
-      navigate('/signin');
+      // Sign up with Supabase Auth
+      const { data, error } = await signUp(
+        formData.Email,
+        formData.Password,
+        {
+          first_name: formData.First_Name,
+          last_name: formData.Last_Name,
+          contact_number: formData.Contact_Number,
+          tehsil: formData.Tehsil,
+          location: formData.Location
+        }
+      );
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Signup Successful', data);
+
+      // Reset form
       setFormData({
         First_Name: '',
         Last_Name: '',
@@ -58,11 +85,21 @@ const Signuppage = () => {
         Tehsil: '',
         Location: '',
       });
+
+      // Redirect to email verification page immediately
+      navigate('/email-verification', {
+        state: {
+          email: formData.Email,
+          message: 'Account created successfully! Please check your email to verify your account before signing in.'
+        }
+      });
+
     } catch (error) {
-      if (error.response && error.response.status === 400) {
-        alert('Email already exists');
+      console.error('Signup error:', error);
+      if (error.message.includes('already registered')) {
+        setMessage('Email already exists. Please use a different email.');
       } else {
-        alert('An error occurred');
+        setMessage(`Signup failed: ${error.message}`);
       }
     } finally {
       setLoading(false);
@@ -78,6 +115,11 @@ const Signuppage = () => {
       ) : (
         <div className="inner-container2">
           <h2>Create Account</h2>
+          {message && (
+            <div className={`message ${message.includes('successful') ? 'success' : 'error'}`}>
+              {message}
+            </div>
+          )}
           <form className="signup-form" onSubmit={handleSubmit}>
             <div className="name-group">
               <div className="form-group">

@@ -1,47 +1,65 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useAuth } from "./contexts/AuthContext.js";
+import { supabase } from "./supabaseClient.js";
 import './UserReports.css';
 
 const UserReports = () => {
-
-
     const [location, setLocation] = useState('');
     const [fullName, setFullName] = useState('');
     const navigate = useNavigate();
     const [userRequests, setUserRequests] = useState([]);
+    const { user, session } = useAuth();
 
     useEffect(() => {
         const fetchUserRequests = async () => {
-            const userId = localStorage.getItem('userId');
+            if (!user) return;
+
             try {
-                const response = await axios.get(`http://localhost:4000/user-requests/${userId}`);
-                console.log('Fetching requests for userId:', userId);
-                setUserRequests(response.data);
+                // Fetch requests directly from Supabase
+                const { data, error } = await supabase
+                    .from('requests')
+                    .select('*')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                console.log('Fetching requests for userId:', user.id);
+                setUserRequests(data || []);
             } catch (error) {
                 console.error('Error fetching user requests:', error);
             }
         };
+
         fetchUserRequests();
-    }, []);
+    }, [user]);
 
     useEffect(() => {
-        const userEmail = localStorage.getItem('userEmail');
-        if (userEmail) {
-            axios.get(`http://localhost:4000/user/${userEmail}`)
-                .then(response => {
-                    const { First_Name, Last_Name, Location } = response.data;
-                    setLocation(Location);
-                    setFullName(`${First_Name} ${Last_Name}`);
-                })
-                .catch(error => {
-                    console.error('Error fetching user data:', error);
-                    navigate('/signin');
-                });
-        } else {
-            navigate('/signin');
-        }
-    }, [navigate]);
+        const fetchUserProfile = async () => {
+            if (!user) return;
+
+            try {
+                // Fetch user profile from Supabase
+                const { data: profile, error } = await supabase
+                    .from('usersdb')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+
+                if (error) throw error;
+
+                if (profile) {
+                    setLocation(profile.location || 'Not specified');
+                    setFullName(`${profile.first_name} ${profile.last_name}`);
+                }
+            } catch (error) {
+                console.error('Error fetching user profile:', error);
+            }
+        };
+
+        fetchUserProfile();
+    }, [user, navigate]);
 
     const formatDate = (dateString) => {
     const date = new Date(dateString);

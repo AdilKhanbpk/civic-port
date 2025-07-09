@@ -117,7 +117,8 @@
 
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useAuth } from "./contexts/AuthContext.js";
+import { supabase } from "./supabaseClient.js";
 import "./UserDashboard.css";
 import InviteNeighborsModal from "./Components/NeighborModal";
 import Logo2 from "./Components/Logo2";
@@ -128,83 +129,118 @@ import DroppedComplaints from "./Components/DroppedComplaints";
 
 const UserDashboard = () => {
   const [location, setLocation] = useState("");
+  const [fullName, setFullName] = useState("");
   const [activePage, setActivePage] = useState("complaint");
   const [showNeighborModal, setShowNeighborModal] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
   const navigate = useNavigate();
+  const { user, session, loading, signOut } = useAuth();
 
   useEffect(() => {
-    const userEmail = localStorage.getItem("userEmail");
-    const token = localStorage.getItem("token");
+    console.log('UserDashboard: Auth state changed', { user, loading });
 
-    if (!userEmail || !token) {
+    // Redirect to signin if not authenticated
+    if (!loading && !user) {
+      console.log('UserDashboard: No user, redirecting to signin');
       navigate("/signin");
       return;
     }
 
-    // Fetch user data
-    axios
-      .get(`http://localhost:4000/user/${userEmail}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setLocation(response.data.Location);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-
-        // Handle different error types
-        if (error.response) {
-          if (error.response.status === 404) {
-            alert("User not found. Please sign in again.");
-          } else if (error.response.status === 401 || error.response.status === 403) {
-            alert("Session expired. Please sign in again.");
-          } else {
-            alert("An error occurred. Please try again later.");
-          }
-        } else {
-          alert("Network error. Please check your connection.");
+    // Check if user email is verified
+    if (user && !user.email_confirmed_at) {
+      console.log('UserDashboard: User email not verified, redirecting to verification page');
+      navigate('/email-verification', {
+        state: {
+          email: user.email,
+          message: 'Please verify your email before accessing the dashboard.'
         }
-
-        localStorage.removeItem("token");
-        localStorage.removeItem("userEmail");
-        navigate("/signin");
       });
-
-    fetchProtectedData();
-  }, [navigate]);
-
-  const fetchProtectedData = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      navigate("/signin");
       return;
     }
+
+    // Fetch user profile data when user is authenticated and verified
+    if (user && session && user.email_confirmed_at) {
+      fetchUserProfile();
+    }
+  }, [user, session, loading, navigate]);
+
+  // Function to create user profile if it doesn't exist
+  const createUserProfile = async () => {
+    if (!user) return;
 
     try {
-      const response = await axios.get("http://localhost:4000/protected", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("Protected data:", response.data);
-    } catch (error) {
-      console.error("Error fetching protected data:", error);
+      console.log('Creating user profile from metadata...');
+      const userMetadata = user.user_metadata || {};
 
-      // Handle different error types
-      if (error.response) {
-        if (error.response.status === 401 || error.response.status === 403) {
-          alert("Session expired. Please sign in again.");
-        }
+      const { data, error } = await supabase
+        .from('usersdb')
+        .insert({
+          id: user.id,
+          first_name: userMetadata.first_name || '',
+          last_name: userMetadata.last_name || '',
+          contact_number: userMetadata.contact_number || '',
+          tehsil: userMetadata.tehsil || '',
+          location: userMetadata.location || ''
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error creating user profile:', error);
+        return;
       }
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("userEmail");
-      navigate("/signin");
+      console.log('User profile created successfully:', data);
+
+      // Update the state with the new profile
+      if (data) {
+        setUserProfile(data);
+        setLocation(data.location || 'Not specified');
+        setFullName(`${data.first_name} ${data.last_name}`.trim() || 'User');
+      }
+    } catch (error) {
+      console.error('Error in createUserProfile:', error);
     }
   };
+
+  const fetchUserProfile = async () => {
+    try {
+      console.log('Fetching user profile for:', user.email);
+
+      // Get user profile from Supabase
+      const { data: profile, error } = await supabase
+        .from('usersdb')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Error fetching user profile:', error);
+
+        // If profile doesn't exist (PGRST116 = no rows returned), create it automatically
+        if (error.code === 'PGRST116') {
+          console.log('Profile not found, creating profile from user metadata...');
+          await createUserProfile();
+          return;
+        }
+
+        // For other errors, just log and continue
+        console.error('Other profile error:', error);
+        return;
+      }
+
+      console.log('User profile:', profile);
+      setUserProfile(profile);
+      setLocation(profile.location || 'Not specified');
+      setFullName(`${profile.first_name} ${profile.last_name}`.trim() || 'User');
+
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+
+  // Remove old fetchProtectedData - no longer needed with Supabase Auth
 
   const handleNeighborClick = () => {
     setShowNeighborModal(true);
@@ -227,10 +263,22 @@ const UserDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      console.log('Logging out user...');
+      const { error } = await signOut();
+
+      if (error) {
+        console.error('Logout error:', error);
+      } else {
+        console.log('Logout successful');
+        navigate("/");
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Force navigation even if logout fails
+      navigate("/");
+    }
   };
 
   // Define an array of pages and corresponding components
@@ -264,6 +312,24 @@ const UserDashboard = () => {
       action: handleNeighborClick,
     },
   ];
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div className="userdashboard" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div>Loading dashboard...</div>
+      </div>
+    );
+  }
+
+  // Show message if no user (shouldn't happen due to redirect, but just in case)
+  if (!user) {
+    return (
+      <div className="userdashboard" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <div>Redirecting to login...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="userdashboard">
