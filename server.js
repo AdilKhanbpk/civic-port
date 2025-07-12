@@ -631,16 +631,38 @@ app.put('/reports/:id', async (req, res) => {
   const { id } = req.params;
   const { status, schedule } = req.body;
 
+  console.log('Updating report:', { id, status, schedule });
+
   try {
+    // Normalize status to match database constraint
+    const normalizedStatus = status ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase() : status;
+
+    // Handle schedule - convert empty string or "null" to null
+    const scheduleValue = (schedule === '' || schedule === 'null' || schedule === null) ? null : schedule;
+
+    console.log('Normalized values:', { normalizedStatus, scheduleValue });
+
     // Update the report in the database
-    await db.query(
-      'UPDATE requests SET status = $1, schedule = $2 WHERE id = $3',
-      [status, schedule, id]
+    const result = await db.query(
+      'UPDATE requests SET status = $1, schedule = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
+      [normalizedStatus, scheduleValue, id]
     );
-    res.status(200).send('Report updated successfully');
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Report not found' });
+    }
+
+    console.log('Report updated successfully:', result.rows[0]);
+    res.status(200).json({
+      message: 'Report updated successfully',
+      report: result.rows[0]
+    });
   } catch (err) {
     console.error('Error updating report:', err);
-    res.status(500).send('Error updating the report');
+    res.status(500).json({
+      message: 'Error updating the report',
+      error: err.message
+    });
   }
 });
 

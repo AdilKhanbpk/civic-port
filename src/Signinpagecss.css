@@ -212,9 +212,13 @@
 
 .signup-link {
   text-align: center;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   color: var(--text-light);
   font-size: 0.95rem;
+}
+
+.signup-link:last-child {
+  margin-bottom: 10px;
 }
 
 .signup-link a {
@@ -264,4 +268,60 @@
   background-color: #fee2e2;
   color: #991b1b;
   border: 1px solid #fca5a5;
+}
+
+/* Admin-specific styling */
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+/* Admin badge styling */
+.innercontainer2 {
+  position: relative;
+}
+
+.innercontainer2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  margin: 0.5rem auto 1rem;
+  border-radius: 2px;
+}
+
+/* Divider styling */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+}
+
+.divider span {
+  padding: 0 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: var(--bg-light);
+}
+
+/* Admin signin button enhancement */
+.submit-button:contains("Admin") {
+  background: linear-gradient(135deg, #1f2937, #374151);
+}
+
+.submit-button:contains("Admin"):hover {
+  background: linear-gradient(135deg, #374151, #4b5563);
 }

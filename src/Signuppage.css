@@ -83,6 +83,20 @@
   animation: fadeIn 0.5s ease-in-out;
 }
 
+/* Admin signup form should match user signup width */
+.inner-container {
+  width: 100%;
+  max-width: 550px;
+  background-color: var(--bg-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-lg);
+  padding: 0;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s ease-out;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -94,7 +108,8 @@
   }
 }
 
-.inner-container2 h2 {
+.inner-container2 h2,
+.inner-container h2 {
   background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
   color: white;
   padding: 1.5rem;
@@ -109,6 +124,7 @@
   display: flex;
   flex-direction: column;
   padding: 2rem;
+  padding-bottom: 0;
 }
 
 .form-group {
@@ -155,6 +171,42 @@
 
 .tehsil {
   margin-bottom: 1.5rem;
+}
+
+.tehsil label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+.tehsil select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background-color: var(--bg-white);
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.tehsil select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.tehsil select:hover {
+  border-color: var(--border-hover);
 }
 
 /* Name group styles */
@@ -215,9 +267,13 @@
 
 .signup-link {
   text-align: center;
-  margin-top: 1.5rem;
+  margin-top: 0.5rem;
   color: var(--text-light);
   font-size: 0.95rem;
+}
+
+.signup-link:last-child {
+  margin-bottom: 10px;
 }
 
 .signup-link a {
@@ -235,7 +291,8 @@
 
 /* Tablet */
 @media (max-width: 992px) {
-  .inner-container2 {
+  .inner-container2,
+  .inner-container {
     width: 90%;
     max-width: 600px;
   }
@@ -247,7 +304,8 @@
     padding: 0;
   }
 
-  .inner-container2 {
+  .inner-container2,
+  .inner-container {
     width: 100%;
     padding: 0.5rem;
     box-shadow: var(--box-shadow-sm);
@@ -257,7 +315,8 @@
     padding: 0.5rem;
   }
 
-  .inner-container2 h2 {
+  .inner-container2 h2,
+  .inner-container h2 {
     font-size: 1.5rem;
     padding: 1rem;
   }
@@ -298,15 +357,20 @@
 
 /* Small Mobile */
 @media (max-width: 480px) {
-  .inner-container2 {
+  .inner-container2,
+  .inner-container {
     padding: 0.3rem;
   }
 
   .signup-form {
-    padding: 0.3rem;
+    padding-top: 0.3rem;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    padding-bottom: 0.1rem;
   }
 
-  .inner-container2 h2 {
+  .inner-container2 h2,
+  .inner-container h2 {
     font-size: 1.25rem;
     padding: 0.8rem;
   }
@@ -353,5 +417,71 @@
   background-color: #fee2e2;
   color: #991b1b;
   border: 1px solid #fca5a5;
+}
+
+/* Admin-specific styling */
+.form-hint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+/* Admin badge styling */
+.innercontainer2 {
+  position: relative;
+}
+
+.innercontainer2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  margin: 0.5rem auto 1rem;
+  border-radius: 2px;
+}
+
+/* Divider styling */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 0.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+}
+
+.divider span {
+  padding: 0 1rem;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: var(--bg-light);
+}
+
+/* Admin form enhancements */
+.form-group input[type="password"]#secretKey {
+  border-left: 4px solid #f59e0b;
+  background-color: #fffbeb;
+}
+
+.form-group input[type="password"]#secretKey:focus {
+  border-left-color: #d97706;
+  background-color: #fef3c7;
 }
 

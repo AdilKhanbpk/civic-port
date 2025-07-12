@@ -133,26 +133,42 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
   };
 
   const filteredRequests = requests.filter((request) => {
+    console.log('Filtering request:', {
+      id: request.id,
+      status: request.status,
+      schedule: request.schedule,
+      selectedCategory
+    });
+
     if (selectedCategory === 'completed') {
       return request.status === 'Closed';
     } else if (selectedCategory === 'pending') {
-      return request.status === 'open';
+      return request.status === 'Open'; // Fixed: Use 'Open' instead of 'open'
     } else if (selectedCategory === 'Dropped'){
       return request.status === 'Dropped';
     }else if (selectedCategory === 'scheduled') {
-      return request.status === 'open' && request.schedule;
+      const hasSchedule = request.schedule && request.schedule !== null && request.schedule !== '';
+      const isOpen = request.status === 'Open';
+      console.log('Scheduled filter:', { hasSchedule, isOpen, schedule: request.schedule });
+      return isOpen && hasSchedule; // Fixed: Use 'Open' instead of 'open'
     } else if (selectedCategory === 'not-scheduled') {
-      return request.status === 'open' && !request.schedule;
+      const hasNoSchedule = !request.schedule || request.schedule === null || request.schedule === '';
+      const isOpen = request.status === 'Open';
+      return isOpen && hasNoSchedule; // Fixed: Use 'Open' instead of 'open'
     } else if (selectedCategory === 'today') {
       const today = new Date();
+      if (!request.schedule) return false; // Handle null schedule
       const scheduleDate = new Date(request.schedule);
       return (
-        request.status === 'open' &&
+        request.status === 'Open' && // Fixed: Use 'Open' instead of 'open'
         scheduleDate.toDateString() === today.toDateString()
       );
     }
     return true;
   });
+
+  console.log('Filtered requests count:', filteredRequests.length);
+  console.log('Selected category:', selectedCategory);
 
   return (
     <div>

@@ -1,8 +1,8 @@
 import React, { useState , useEffect } from "react";
 import axios from "axios";
-import './Adminsignup.css';
+import './Signuppage.css'; // Use the same modern CSS as user signup
 import Logo from "./Components/Logo";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Adminsignup = () => {
   const [formData, setFormData] = useState({
@@ -76,80 +76,120 @@ fetchtehsils();
   };
 
   return (
-    <div>
-      <Logo />
-      <div className="signup-container3">
-        <div className="inner-container3">
-          <h2>Admin Signup</h2>
-          <form className="signup-form" onSubmit={handleSubmit}>
-            <div className="name-group">
-              <div className="form-group">
-                <label>First Name</label>
-                <input
-                  type="text"
-                  name="First_Name"
-                  value={formData.First_Name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="form-group">
-                <label>Last Name</label>
-                <input
-                  type="text"
-                  name="Last_Name"
-                  value={formData.Last_Name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
+    <div className="signup-container">
+      <div className="inner-container">
+        {/* <div className="logo-section">
+          <Logo />
+        </div> */}
+
+        <h2 className='innercontainer2'>Admin Registration</h2>
+        {/* <p className="subtitle">Create an administrative account</p> */}
+
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <div className="name-group">
             <div className="form-group">
-              <label>Email</label>
+              <label htmlFor="firstName">First Name</label>
               <input
-                type="email"
-                name="Email"
-                value={formData.Email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                name="Password"
-                value={formData.Password}
-                onChange={handleChange}
-                required
-              /> 
-            </div>
-            <div className="tehsil">
-              <label>Tehsil</label>
-              <select
-                name="Tehsil"
-                value={formData.Tehsil}
-                onChange={handleChange}
-                required
-              >
-                <option value=''>Select Your Tehsil</option>
-                {tehsils.map((tehsil , index) => 
-                    <option key={index} value={formData.tehsil}>{tehsil.tehsil}</option>
-                )}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Secret Key</label>
-              <input
+                id="firstName"
                 type="text"
-                name="Secret_Key"
-                value={formData.Secret_Key}
+                name="First_Name"
+                placeholder="Enter your first name"
+                value={formData.First_Name}
                 onChange={handleChange}
                 required
               />
             </div>
-            <button type="submit" className="submit-button">Sign Up</button>
-          </form>
+            <div className="form-group">
+              <label htmlFor="lastName">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                name="Last_Name"
+                placeholder="Enter your last name"
+                value={formData.Last_Name}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              name="Email"
+              placeholder="Enter your email address"
+              value={formData.Email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="Password"
+              placeholder="Create a strong password"
+              value={formData.Password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="tehsil">Tehsil</label>
+            <select
+              id="tehsil"
+              name="Tehsil"
+              value={formData.Tehsil}
+              onChange={handleChange}
+              required
+            >
+              <option value=''>Select Your Tehsil</option>
+              {tehsils.map((tehsil, index) =>
+                <option key={index} value={tehsil.tehsil}>{tehsil.tehsil}</option>
+              )}
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="secretKey">Admin Secret Key</label>
+            <input
+              id="secretKey"
+              type="password"
+              name="Secret_Key"
+              placeholder="Enter the admin secret key"
+              value={formData.Secret_Key}
+              onChange={handleChange}
+              required
+            />
+            <small className="form-hint">
+              Contact your system administrator for the secret key
+            </small>
+          </div>
+
+          <button type="submit" className="submit-button">
+            Create Admin Account
+          </button>
+        </form>
+
+        <div className="signup-link">
+          <p>
+            Already have an admin account? <Link to="/adminsignin">Sign In</Link>
+          </p>
+        </div>
+
+        <div className="divider">
+          <span>or</span>
+        </div>
+
+        <div className="signup-link">
+          <p>
+            Regular User? <Link to="/signup">User Registration</Link>
+          </p>
         </div>
       </div>
     </div>

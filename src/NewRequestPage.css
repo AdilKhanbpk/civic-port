@@ -3,10 +3,11 @@
 .request-page-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  /* height: 100vh; */
-  background-color: #f4f6f9; /* A light background to give a clean look */
-  padding: 10px; /* Extra padding for better spacing on larger screens */
+  align-items: flex-start; /* Changed from center to flex-start for better mobile experience */
+  min-height: 100vh; /* Use min-height instead of height for better content handling */
+  background: linear-gradient(135deg, #f4f6f9 0%, #e8f4f8 100%); /* Enhanced gradient background */
+  padding: 20px; /* Increased padding for better spacing */
+  box-sizing: border-box; /* Ensure padding is included in height calculation */
 }
 .PleaseSelect{
   margin-top: 50px;
@@ -19,22 +20,36 @@
 }
 .form-wrapper {
   width: 100%;
-  max-width: 800px; /* Increased max-width for better desktop display */
+  max-width: 900px; /* Increased max-width for better desktop display */
   background: #fff;
-  padding:15px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Softer shadow for depth */
+  padding: 30px; /* Increased padding for better spacing */
+  border-radius: 16px; /* More modern border radius */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05); /* Enhanced shadow for depth */
   border-left: 5px solid rgb(18, 114, 18); /* Main color for accent border */
   border-top: 5px solid rgb(18, 114, 18); /* Main color for accent border */
+  margin: 20px 0; /* Add vertical margin for better spacing */
+  animation: slideUp 0.6s ease-out; /* Add entrance animation */
 }
 
 .form-heading {
-  margin-bottom: 15px;
-  margin-top: 15px;
-  font-size: 32px;
+  margin-bottom: 25px;
+  margin-top: 0; /* Remove top margin for better spacing */
+  font-size: 2rem; /* Use rem for better responsiveness */
   color: rgb(18, 114, 18);
-  font-weight: bold;
+  font-weight: 700; /* Slightly bolder */
   text-align: center;
+  letter-spacing: 0.5px; /* Add letter spacing for elegance */
+  position: relative;
+}
+
+.form-heading::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, rgb(18, 114, 18), rgb(34, 197, 94));
+  margin: 10px auto 0;
+  border-radius: 2px;
 }
 
 .form-row {
@@ -93,20 +108,29 @@
 
 .submit-button {
   width: 100%;
-  padding: 14px;
-  background-color: rgb(18, 114, 18);
+  padding: 16px;
+  background: linear-gradient(135deg, rgb(18, 114, 18), rgb(34, 197, 94));
   color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
   font-size: 18px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  margin-top: 15px;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(18, 114, 18, 0.3);
+  letter-spacing: 0.5px;
 }
 
 .submit-button:hover {
-  background-color: #145f14;
-  transform: translateY(-3px); /* Subtle hover effect */
+  background: linear-gradient(135deg, rgb(34, 197, 94), rgb(18, 114, 18));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(18, 114, 18, 0.4);
+}
+
+.submit-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(18, 114, 18, 0.3);
 }
 
 /* Adding hover and focus effects for inputs */
@@ -178,8 +202,31 @@ Here’s a CSS snippet to style the request forms uniformly:
 }
 
 
-/* Responsive behavior for smaller screens */
+/* Animation for form entrance */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced responsive behavior */
 @media (max-width: 768px) {
+  .request-page-container {
+    padding: 15px;
+    align-items: flex-start; /* Ensure proper alignment on mobile */
+  }
+
+  .form-wrapper {
+    padding: 20px; /* Reduced padding for smaller screens */
+    margin: 10px 0;
+    border-radius: 12px;
+  }
+
   .form-row {
     flex-direction: column; /* Stack inputs on smaller screens */
     gap: 0;
@@ -187,9 +234,41 @@ Here’s a CSS snippet to style the request forms uniformly:
 
   .form-item {
     width: 100%; /* Full width for smaller screens */
+    margin-bottom: 15px;
   }
+
   .FORMDIV{
     display: flex;
     flex-direction: column;
   }
+
+  .form-heading {
+    font-size: 1.75rem; /* Smaller heading on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .request-page-container {
+    padding: 10px;
+  }
+
+  .form-wrapper {
+    padding: 15px;
+    margin: 5px 0;
+  }
+
+  .form-heading {
+    font-size: 1.5rem;
+  }
+}
+
+/* Ensure full height on all screen sizes */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#root {
+  min-height: 100vh;
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Logo from './Components/Logo.jsx';
 import axios from 'axios';
-import './Adminsignin.css'; 
+import './Signinpagecss.css'; // Use the same modern CSS as user signin
 
 const AdminSigninpage = () => {
   const [formData, setFormData] = useState({
@@ -47,44 +47,75 @@ const AdminSigninpage = () => {
   };
 
   return (
-    <div style={{display:'flex' , alignItems:'center' , justifyContent:'center' , height:'100vh' , width:'auto'}}>
-      {/* <Logo /> */}
-      <div className='mainbody'>
-      <div className="admin-signin-container">
-        <div className="admin-inner-container" >
-          <h2>Admin Sign In</h2>
-          <form className="admin-signin-form" onSubmit={handleSubmit}>
-            <div className="admin-form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                required
-                placeholder="Email Address"
-                name="Email"
-                value={formData.Email}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="admin-form-group">
-              <label>Password</label>
-              <input
-                type="password"
-                required
-                placeholder="Password"
-                name="Password"
-                value={formData.Password}
-                onChange={handleChange}
-              />
-            </div>
-            <button type="submit" className="submit-button">
-              {loading ? 'Signing In...' : 'Sign In'}
-            </button>
-            <div className="admin-signup-link">
-              New Admin? <Link to="/adminsignup">Sign Up</Link>
-            </div>
-          </form>
+    <div className="signin-container">
+      <div className="inner-container">
+        {/* <div className="logo-section">
+          <Logo />
+        </div> */}
+
+        <h2 className='innercontainer2'>Admin Sign In</h2>
+        {/* <p className="subtitle">Access the administrative dashboard</p> */}
+
+        <form className="signin-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input
+              id="email"
+              type="email"
+              required
+              placeholder="Enter your admin email"
+              name="Email"
+              value={formData.Email}
+              onChange={handleChange}
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              required
+              placeholder="Enter your password"
+              name="Password"
+              value={formData.Password}
+              onChange={handleChange}
+              disabled={loading}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className={`submit-button ${loading ? 'loading' : ''}`}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <span className="loading-spinner"></span>
+                Signing In...
+              </>
+            ) : (
+              'Sign In as Admin'
+            )}
+          </button>
+        </form>
+
+        <div className="signup-link">
+          <p>
+            New Admin? <Link to="/adminsignup">Create Account</Link>
+          </p>
         </div>
-      </div>
+
+        <div className="divider">
+          <span>or</span>
+        </div>
+
+        <div className="signup-link">
+          <p>
+            Regular User? <Link to="/signin">User Sign In</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
