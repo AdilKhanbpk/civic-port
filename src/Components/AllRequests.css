@@ -47,6 +47,14 @@
   font-size: 0.9rem;
 }
 
+.count-badge.completed {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.count-badge.dropped {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
 /* Reports Grid */
 .reports-grid {
   display: grid;

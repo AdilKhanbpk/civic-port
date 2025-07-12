@@ -37,7 +37,8 @@
 .serviceheading {
   font-size: 24px;
   margin-bottom: 20px;
-  color: var(--primary-color);
+  color:#0e9a6c;
+
   position: relative;
   display: inline-block;
   padding-bottom: 8px;
@@ -56,7 +57,8 @@
   left: 0;
   width: 50px;
   height: 3px;
-  background: linear-gradient(to right, var(--primary-color), var(--primary-light));
+      background: linear-gradient(135deg, #0e9a6c, #059669);
+
   border-radius: 3px;
 }
 
@@ -71,7 +73,7 @@
 }
 
 .card1 {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    background: linear-gradient(135deg, #0e9a6c, #059669);
   min-width: 300px;
   width: 55%;
   max-width: 600px;
@@ -153,7 +155,8 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+      background: linear-gradient(135deg, #0e9a6c, #059669);
+
   padding: 10px 20px;
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);

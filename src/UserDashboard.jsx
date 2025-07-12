@@ -366,6 +366,14 @@ const UserDashboard = () => {
               </button>
             ))}
           </div>
+
+          {/* Mobile Logout Button */}
+          <div className="mobile-logout-container">
+            <button onClick={handleLogout} className="mobile-logout-btn">
+              <img src="logout.png" alt="logout" className="mobile-logout-img" />
+              Logout
+            </button>
+          </div>
         </div>
       </div>
 
@@ -374,7 +382,7 @@ const UserDashboard = () => {
         <div className="dashboard2-1-outer">
         <div className="dashboard2-1">
           <h4>Your Location: {location || "Loading..."}</h4>
-          <div className="logout-container">
+          <div className="logout-container desktop-logout">
             <p onClick={handleLogout}>
               <img src="logout.png" alt="logout" className="logout-img" />
               <span className="custom-tooltip">Logout</span>
