@@ -334,14 +334,14 @@ const UserDashboard = () => {
   return (
     <div className="userdashboard">
       {/* Mobile Navigation Toggle Button */}
-      <button
+      {/* <button
         className={`user-nav-toggle ${sidebarOpen ? 'active' : ''}`}
         onClick={toggleSidebar}
       >
         <span className="line"></span>
         <span className="line"></span>
         <span className="line"></span>
-      </button>
+      </button> */}
 
       {/* Sidebar */}
       <div className={`dashboard1 ${sidebarOpen ? 'show' : ''}`}>
@@ -371,6 +371,7 @@ const UserDashboard = () => {
 
       {/* Main Content */}
       <div className="dashboard2">
+        <div className="dashboard2-1-outer">
         <div className="dashboard2-1">
           <h4>Your Location: {location || "Loading..."}</h4>
           <div className="logout-container">
@@ -379,6 +380,15 @@ const UserDashboard = () => {
               <span className="custom-tooltip">Logout</span>
             </p>
           </div>
+        </div>
+        <button
+        className={`user-nav-toggle ${sidebarOpen ? 'active' : ''}`}
+        onClick={toggleSidebar}
+      >
+        <span className="line"></span>
+        <span className="line"></span>
+        <span className="line"></span>
+      </button>
         </div>
 
         <div className="dashboard2-2">

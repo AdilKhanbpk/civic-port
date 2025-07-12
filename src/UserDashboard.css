@@ -150,6 +150,22 @@
   width: 75%;
   margin-left: 295px;
 }
+.dashboard2-1-outer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: var(--bg-light);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow);
+  position: relative;
+  overflow: hidden;
+  /* margin-top: 80px; */
+  width: 100%;
+  position: fixed;
+  top: 1vw;
+
+}
 
 .dashboard2-1 {
   background: linear-gradient(to right, var(--primary-color), var(--primary-light));

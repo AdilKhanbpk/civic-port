@@ -6,6 +6,8 @@ import './AllRequests.css';
 const AllRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user, session } = useAuth();
 
   useEffect(() => {
@@ -40,48 +42,186 @@ const AllRequests = () => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  const openModal = (request) => {
+    setSelectedRequest(request);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedRequest(null);
+    setIsModalOpen(false);
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Open':
+        return '#f59e0b'; // Amber
+      case 'In Progress':
+        return '#3b82f6'; // Blue
+      case 'Closed':
+        return '#10b981'; // Green
+      case 'Dropped':
+        return '#ef4444'; // Red
+      default:
+        return '#6b7280'; // Gray
+    }
+  };
+
+  const truncateText = (text, maxLength = 100) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
   };
 
 
   return (
     <div className='allrequests'>
-      <div className="userrequests-title">
-            <p>OverAll Reports on Civic Portal</p>
-           </div>
+      <div className="page-header">
+        <h1 className="page-title">All Community Reports</h1>
+        <p className="page-subtitle">Browse all reports submitted by community members</p>
+        <div className="reports-count">
+          <span className="count-badge">{requests.length} Reports</span>
+        </div>
+      </div>
+
       {loading ? (
-        <p>Loading...</p>
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading reports...</p>
+        </div>
       ) : requests.length === 0 ? (
-        <p style={{marginLeft:'30px' , fontSize:'22px', fontWeight:'bold'}}>There are no requests reported.</p>
+        <div className="no-reports">
+          <div className="no-reports-icon">📋</div>
+          <h3>No Reports Found</h3>
+          <p>There are currently no reports in the system.</p>
+        </div>
       ) : (
-        <div className='requests-list'>
-          <ul>
-            {requests.map((request) => (
-              <li key={request.id} className='request-item'>
-                <div className='imag'>
-                  {request.image && <img src={`http://localhost:4000/${request.image}`} alt="Request" />}
-                </div>
-                <div className='metadata'>
-                  <div className='titleand'>
-                    <h3>{request.issue}</h3>
-                    <p className='status' style={{
-                      color:
-                        request.status === 'Open' ? 'rgb(201, 72, 12)' :
-                        request.status === 'Dropped' ? 'red' : 'green',
-                      fontSize: '22px',
-                      fontWeight: 'bold',
-                    }}>
-                      {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                    </p>
+        <div className='reports-grid'>
+          {requests.map((request) => (
+            <div
+              key={request.id}
+              className='report-card'
+              onClick={() => openModal(request)}
+            >
+              <div className='card-image'>
+                {request.image ? (
+                  <img src={`http://localhost:4000/${request.image}`} alt="Report" />
+                ) : (
+                  <div className="no-image-placeholder">
+                    <span>📷</span>
+                    <p>No Image</p>
                   </div>
-                  <p><strong>Tehsil:</strong> {request.tehsil}</p>
-                  <p><strong>Location:</strong> {request.location}</p>
-                  <p><strong>Reported On:</strong> {formatDate(request.created_at)}</p>
-                  <p><strong>Description:</strong> {request.description}</p>
+                )}
+              </div>
+
+              <div className='card-content'>
+                <div className='card-header'>
+                  <h3 className='card-title'>{request.issue}</h3>
+                  <span
+                    className='status-badge'
+                    style={{ backgroundColor: getStatusColor(request.status) }}
+                  >
+                    {request.status}
+                  </span>
                 </div>
-              </li>
-            ))}
-          </ul>
+
+                <div className='card-details'>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>📍</span>
+                    <span className='detail-text'>{request.location}</span>
+                  </div>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>🏛️</span>
+                    <span className='detail-text'>{request.tehsil}</span>
+                  </div>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>📅</span>
+                    <span className='detail-text'>{formatDate(request.created_at)}</span>
+                  </div>
+                </div>
+
+                <div className='card-description'>
+                  <p>{truncateText(request.description, 80)}</p>
+                </div>
+
+                <div className='card-footer'>
+                  <span className='view-details'>Click to view details →</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal */}
+      {isModalOpen && selectedRequest && (
+        <div className='modal-overlay' onClick={closeModal}>
+          <div className='modal-content' onClick={(e) => e.stopPropagation()}>
+            <div className='modal-header'>
+              <div className='modal-image'>
+                {selectedRequest.image ? (
+                  <img src={`http://localhost:4000/${selectedRequest.image}`} alt="Report" />
+                ) : (
+                  <div className="modal-no-image">
+                    <span>📷</span>
+                    <p>No Image Available</p>
+                  </div>
+                )}
+              </div>
+              <button className='modal-close' onClick={closeModal}>×</button>
+            </div>
+
+            <div className='modal-body'>
+              <div className='modal-title-section'>
+                <h2>{selectedRequest.issue}</h2>
+              </div>
+
+              <div className='modal-details'>
+                <div className='detail-row'>
+                  <span className='detail-label'>Status:</span>
+                  <span
+                    className='status-badge modal-status'
+                    style={{ backgroundColor: getStatusColor(selectedRequest.status) }}
+                  >
+                    {selectedRequest.status}
+                  </span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Location:</span>
+                  <span className='detail-value'>{selectedRequest.location}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Tehsil:</span>
+                  <span className='detail-value'>{selectedRequest.tehsil}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Reported On:</span>
+                  <span className='detail-value'>{formatDate(selectedRequest.created_at)}</span>
+                </div>
+
+                {selectedRequest.schedule && (
+                  <div className='detail-row'>
+                    <span className='detail-label'>Scheduled:</span>
+                    <span className='detail-value'>{formatDate(selectedRequest.schedule)}</span>
+                  </div>
+                )}
+
+                <div className='detail-row description-row'>
+                  <span className='detail-label'>Description:</span>
+                  <p className='detail-description'>{selectedRequest.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
