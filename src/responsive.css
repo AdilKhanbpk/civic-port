@@ -284,7 +284,7 @@ img {
 }
 
 .card-header {
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-1) var(--space-2);
   background-color: var(--bg-light);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }

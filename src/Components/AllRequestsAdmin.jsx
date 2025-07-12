@@ -110,7 +110,60 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
+  const openModal = (request) => {
+    setSelectedReport(request);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedReport(null);
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Open':
+        return '#f59e0b'; // Amber
+      case 'In Progress':
+        return '#3b82f6'; // Blue
+      case 'Closed':
+        return '#10b981'; // Green
+      case 'Dropped':
+        return '#ef4444'; // Red
+      default:
+        return '#6b7280'; // Gray
+    }
+  };
+
+  const truncateText = (text, maxLength = 100) => {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+  };
+
+  const getPageTitle = () => {
+    switch (selectedCategory) {
+      case 'completed':
+        return 'Completed Reports';
+      case 'pending':
+        return 'Pending Reports';
+      case 'Dropped':
+        return 'Dropped Reports';
+      case 'scheduled':
+        return 'Scheduled Reports';
+      case 'not-scheduled':
+        return 'Not-Scheduled Reports';
+      case 'today':
+        return "Today's Tasks";
+      default:
+        return 'All Reports';
+    }
   };
 
   const getNoRequestsMessage = () => {
@@ -130,6 +183,26 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
       default:
         return 'No Requests Found';
     }
+  };
+
+  const getReportCounts = () => {
+    const totalCount = filteredRequests.length;
+    const completedCount = filteredRequests.filter(r => r.status === 'Closed').length;
+
+    // If a specific category is selected (not 'all'), show only that category count
+    if (selectedCategory && selectedCategory !== 'all') {
+      return (
+        <span className="count-badge">{totalCount} {getPageTitle()}</span>
+      );
+    }
+
+    // For 'all' or no category, show both total and completed
+    return (
+      <>
+        <span className="count-badge">{totalCount} Reports</span>
+        <span className="count-badge completed">{completedCount} Completed</span>
+      </>
+    );
   };
 
   const filteredRequests = requests.filter((request) => {
@@ -171,126 +244,214 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
   console.log('Selected category:', selectedCategory);
 
   return (
-    <div>
-      <div className='allrequests1' style={{fontFamily:''}}>
-        {loading ? (
-          <p>Loading...</p>
-        ) : filteredRequests.length === 0 ? (
-          <p className='norequest'>{getNoRequestsMessage()}</p>
-        ) : (
-          <div className='requests-list1' style={{ width: '100%' }}>
-            <ul>
-              {filteredRequests.map((request) => (
-                <li key={request.id} className='request-item1'>
-                  <div className='fullRequest'>
-                    <div className='imag1'>
-                      {request.image ? (
-                        <img src={`http://localhost:4000/${request.image}`} alt="Issue" />
-                      ) : (
-                        <div className="no-image">
-                          <span>No Image Available</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className='metadata1'>
-                      <div className='titleandedit'>
-                        <h3>{request.issue}</h3>
-                        <button
-                          onClick={() => handleEditClick(request)}
-                          className='editbutton'
-                        >
-                          Edit
-                        </button>
-                      </div>
-
-                      <div className="request-details">
-                        <div className="detail-item">
-                          <div className="detail-icon location-icon"></div>
-                          <p><strong>Location:</strong> {request.location}</p>
-                        </div>
-
-                        <div className="detail-item">
-                          <div className="detail-icon status-icon"></div>
-                          <div className="status-container">
-                            <strong>Status:</strong>
-                            <span className={`status-badge ${request.status.toLowerCase()}`}>
-                              {request.status.charAt(0).toUpperCase() + request.status.slice(1)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="request-dates">
-                        <div className="date-item">
-                          <div className="date-icon reported-icon"></div>
-                          <p><strong>Reported:</strong> {formatDate(request.created_at)}</p>
-                        </div>
-
-                        <div className="date-item">
-                          <div className="date-icon scheduled-icon"></div>
-                          <p>
-                            <strong>Scheduled:</strong>
-                            <span className={!request.schedule ? 'not-scheduled' : ''}>
-                              {request.schedule ? formatDate(request.schedule) : 'Not Scheduled Yet'}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="reporter-section">
-                        <div className="reporter-header">
-                          <div className="reporter-icon"></div>
-                          <h4>Reporter Information</h4>
-                        </div>
-                        <div className="reporter-details">
-                          <p><strong>Name:</strong> {request.name}</p>
-                          <p><strong>Contact:</strong> {userContacts[request.userId] || 'Fetching...'}</p>
-                        </div>
-                      </div>
-
-                      <div className="document-section">
-                        <div className="document-header">
-                          <div className="document-icon"></div>
-                          <h4>Documents</h4>
-                        </div>
-                        <div className="document-content">
-                          {request.document ? (
-                            <a
-                              className="document-link"
-                              href={`http://localhost:4000/${request.document}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              View Document
-                            </a>
-                          ) : (
-                            <p className="no-document">
-                              {noDocumentsMessage[request.id] || 'No document available'}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="description-section">
-                        <div className="description-header">
-                          <div className="description-icon"></div>
-                          <h4>Description</h4>
-                        </div>
-                        <p className="description-content">{request.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+    <div className='allrequests'>
+      <div className="page-header">
+        <h1 className="page-title">{getPageTitle()}</h1>
+        <p className="page-subtitle">Manage and review all submitted reports</p>
+        <div className="reports-count">
+          {getReportCounts()}
+        </div>
       </div>
 
-      {/* Render the modal outside the loop as a single instance */}
+      {loading ? (
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading reports...</p>
+        </div>
+      ) : filteredRequests.length === 0 ? (
+        <div className="no-reports">
+          <div className="no-reports-icon">📋</div>
+          <h3>{getNoRequestsMessage()}</h3>
+          <p>No reports match the current filter criteria.</p>
+        </div>
+      ) : (
+        <div className='reports-grid'>
+          {filteredRequests.map((request) => (
+            <div
+              key={request.id}
+              className='report-card admin-report-card'
+              onClick={() => openModal(request)}
+            >
+              <div className='card-image'>
+                {request.image ? (
+                  <img src={`http://localhost:4000/${request.image}`} alt="Report" />
+                ) : (
+                  <div className="no-image-placeholder">
+                    <span>📷</span>
+                    <p>No Image</p>
+                  </div>
+                )}
+              </div>
+
+              <div className='card-content'>
+                <div className='card-header'>
+                  <h3 className='card-title'>{request.issue}</h3>
+                  <span
+                    className='status-badge'
+                    style={{ backgroundColor: getStatusColor(request.status) }}
+                  >
+                    {request.status}
+                  </span>
+                </div>
+
+                <div className='card-details'>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>📍</span>
+                    <span className='detail-text'>{request.location}</span>
+                  </div>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>🏛️</span>
+                    <span className='detail-text'>{request.tehsil}</span>
+                  </div>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>👤</span>
+                    <span className='detail-text'>{request.name}</span>
+                  </div>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>📞</span>
+                    <span className='detail-text'>{userContacts[request.userId] || 'Loading...'}</span>
+                  </div>
+                  <div className='detail-item'>
+                    <span className='detail-icon'>📅</span>
+                    <span className='detail-text'>{formatDate(request.created_at)}</span>
+                  </div>
+                  {request.schedule && (
+                    <div className='detail-item'>
+                      <span className='detail-icon'>⏰</span>
+                      <span className='detail-text'>Scheduled: {formatDate(request.schedule)}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className='card-description'>
+                  <p>{truncateText(request.description, 80)}</p>
+                </div>
+
+                {/* <div className='card-footer admin-card-footer'>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditClick(request);
+                    }}
+                    className='edit-btn'
+                  >
+                    ✏️ Edit
+                  </button>
+                  <span className='view-details'>Click to view details →</span>
+                </div> */}
+              </div>
+            </div>
+
+          ))}
+        </div>
+      )}
+
+      {/* Enhanced Modal with All Admin Details */}
+      {showModal && selectedReport && (
+        <div className='modal-overlay' onClick={closeModal}>
+          <div className='modal-content admin-modal-content' onClick={(e) => e.stopPropagation()}>
+            <div className='modal-header'>
+              <div className='modal-image'>
+                {selectedReport.image ? (
+                  <img src={`http://localhost:4000/${selectedReport.image}`} alt="Report" />
+                ) : (
+                  <div className="modal-no-image">
+                    <span>📷</span>
+                    <p>No Image Available</p>
+                  </div>
+                )}
+              </div>
+              <button className='modal-close' onClick={closeModal}>×</button>
+            </div>
+
+            <div className='modal-body admin-modal-body'>
+              <div className='modal-title-section'>
+                <h2>{selectedReport.issue}</h2>
+                <button
+                  onClick={() => handleEditClick(selectedReport)}
+                  className='modal-edit-btn'
+                >
+                  ✏️ Edit Report
+                </button>
+              </div>
+
+              <div className='modal-details admin-modal-details'>
+                <div className='detail-row'>
+                  <span className='detail-label'>Status:</span>
+                  <span
+                    className='status-badge modal-status'
+                    style={{ backgroundColor: getStatusColor(selectedReport.status) }}
+                  >
+                    {selectedReport.status}
+                  </span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Location:</span>
+                  <span className='detail-value'>{selectedReport.location}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Tehsil:</span>
+                  <span className='detail-value'>{selectedReport.tehsil}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Reporter Name:</span>
+                  <span className='detail-value'>{selectedReport.name}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Contact Number:</span>
+                  <span className='detail-value'>{userContacts[selectedReport.userId] || 'Loading...'}</span>
+                </div>
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Reported On:</span>
+                  <span className='detail-value'>{formatDate(selectedReport.created_at)}</span>
+                </div>
+
+                {selectedReport.schedule && (
+                  <div className='detail-row'>
+                    <span className='detail-label'>Scheduled:</span>
+                    <span className='detail-value'>{formatDate(selectedReport.schedule)}</span>
+                  </div>
+                )}
+
+                <div className='detail-row'>
+                  <span className='detail-label'>Document:</span>
+                  <span className='detail-value'>
+                    {selectedReport.document ? (
+                      <a
+                        href={`http://localhost:4000/${selectedReport.document}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className='document-link'
+                      >
+                        📄 View Document
+                      </a>
+                    ) : (
+                      <span className='no-document'>
+                        {noDocumentsMessage[selectedReport.id] || 'No document available'}
+                      </span>
+                    )}
+                  </span>
+                </div>
+
+                <div className='detail-row description-row'>
+                  <span className='detail-label'>Description:</span>
+                  <p className='detail-description'>{selectedReport.description}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Keep the Edit Modal */}
       {selectedReport && (
         <EditModal
-          show={showModal}
+          show={showModal && selectedReport}
           onClose={handleCloseModal}
           report={selectedReport}
         />

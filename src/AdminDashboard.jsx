@@ -94,16 +94,6 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      {/* Mobile Navigation Toggle Button */}
-      <button
-        className={`admin-nav-toggle ${sidebarOpen ? 'active' : ''}`}
-        onClick={toggleSidebar}
-      >
-        <span className="line"></span>
-        <span className="line"></span>
-        <span className="line"></span>
-      </button>
-
       {/* Sidebar */}
       <div className={`admin-sidebar ${sidebarOpen ? 'show' : ''}`}>
         <div className="admin-logo">
@@ -124,24 +114,47 @@ const AdminDashboard = () => {
             ))}
           </div>
         </div>
+
+        {/* Mobile Logout Button */}
+        <div className="mobile-logout-container">
+          <button className="mobile-logout-btn" onClick={handleLogout}>
+            <img src="logout.png" alt="logout" className="mobile-logout-img" />
+            Logout
+          </button>
+        </div>
       </div>
 
       {/* Main Content */}
       <div className="admin-content">
-        <div className="admin-header">
-          <h4>Administration Dashboard</h4>
-          <div className="logout-container">
-            <img
-              src="logout.png"
-              alt="logout"
-              className="logout-img"
-              onClick={handleLogout}
-            />
-            <span className="custom-tooltip">Logout</span>
+        <div className="admin-header-outer">
+          <div className="admin-header">
+            {/* Mobile Navigation Toggle Button */}
+            <button
+              className={`admin-nav-toggle ${sidebarOpen ? 'active' : ''}`}
+              onClick={toggleSidebar}
+            >
+              <span className="line"></span>
+              <span className="line"></span>
+              <span className="line"></span>
+            </button>
+
+            <h4>Administration Dashboard</h4>
+
+            {/* Desktop Logout Button */}
+            <div className="logout-container desktop-logout">
+              <img
+                src="logout.png"
+                alt="logout"
+                className="logout-img"
+                onClick={handleLogout}
+              />
+              <span className="custom-tooltip">Logout</span>
+            </div>
           </div>
         </div>
+
         <div className="admin-main">
-          <h3>{pageTitle}</h3>
+          {/* <h3>{pageTitle}</h3> */}
           <AllRequestsAdmin selectedCategory={selectedCategory} />
         </div>
       </div>
