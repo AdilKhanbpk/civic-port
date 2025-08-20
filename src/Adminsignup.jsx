@@ -18,6 +18,8 @@ const Adminsignup = () => {
   useEffect(() => {
     const fetchtehsils = async() => {
       try{
+
+        
       const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:4000';
       const response = await axios.get(backendUrl + '/api/gettehsils');
       settehsils(response.data)
