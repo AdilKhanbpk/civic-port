@@ -55,7 +55,7 @@
   border-radius: 16px;
   position: fixed;
   top: 20px;
-  left: 20px;
+  left: 10px;
   z-index: 1000;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   overflow-y: auto;

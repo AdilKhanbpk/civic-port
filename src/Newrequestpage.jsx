@@ -170,7 +170,7 @@ const NewRequestPage = () => {
         return;
       }
 
-      const response = await axios.post('http://localhost:4000/newrequest', formData, {
+      const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/newrequest', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${accessToken}`,

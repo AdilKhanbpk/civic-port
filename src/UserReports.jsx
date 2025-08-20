@@ -132,7 +132,7 @@ const UserReports = () => {
                         >
                             <div className='card-image'>
                                 {request.image ? (
-                                    <img src={`http://localhost:4000/${request.image}`} alt="Report" />
+                                    <img src={process.env.REACT_APP_BACKEND_URL + `/${request.image}`} alt="Report" />
                                 ) : (
                                     <div className="no-image-placeholder">
                                         <span>📷</span>
@@ -193,7 +193,7 @@ const UserReports = () => {
                         <div className='modal-header'>
                             <div className='modal-image'>
                                 {selectedRequest.image ? (
-                                    <img src={`http://localhost:4000/${selectedRequest.image}`} alt="Report" />
+                                    <img src={process.env.REACT_APP_BACKEND_URL +`/${selectedRequest.image}`} alt="Report" />
                                 ) : (
                                     <div className="modal-no-image">
                                         <span>📷</span>

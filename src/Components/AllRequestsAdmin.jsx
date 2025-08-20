@@ -24,7 +24,7 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
         }
 
         // Fetch requests
-        const response = await axios.get('http://localhost:4000/adminrequests', {
+        const response = await axios.get(process.env.REACT_APP_BACKEND_URL +'/adminrequests', {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -35,7 +35,7 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
         const pdfPromises = fetchedRequests.map(async (request) => {
           if (request.document) {
             const pdfResponse = await axios.get(
-              `http://localhost:4000/download-pdf/${request.id}`, // Use request.id
+              process.env.REACT_APP_BACKEND_URL +`/download-pdf/${request.id}`, // Use request.id
               {
                 headers: {
                   Authorization: `Bearer ${token}`, // Add Bearer token here
@@ -77,7 +77,7 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
         for (const request of fetchedRequests) {
           if (request.userId) {
             const contactResponse = await axios.get(
-              `http://localhost:4000/request-contact/${request.userId}`,
+              process.env.REACT_APP_BACKEND_URL +`/request-contact/${request.userId}`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
             contacts[request.userId] = contactResponse.data.contactNumber;
@@ -274,7 +274,7 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
             >
               <div className='card-image'>
                 {request.image ? (
-                  <img src={`http://localhost:4000/${request.image}`} alt="Report" />
+                  <img src={process.env.REACT_APP_BACKEND_URL +`/${request.image}`} alt="Report" />
                 ) : (
                   <div className="no-image-placeholder">
                     <span>📷</span>
@@ -353,7 +353,7 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
             <div className='modal-header'>
               <div className='modal-image'>
                 {selectedReport.image ? (
-                  <img src={`http://localhost:4000/${selectedReport.image}`} alt="Report" />
+                  <img src={process.env.REACT_APP_BACKEND_URL +`/${selectedReport.image}`} alt="Report" />
                 ) : (
                   <div className="modal-no-image">
                     <span>📷</span>
@@ -423,7 +423,7 @@ const AllRequestsAdmin = ({ selectedCategory }) => {
                   <span className='detail-value'>
                     {selectedReport.document ? (
                       <a
-                        href={`http://localhost:4000/${selectedReport.document}`}
+                        href={process.env.REACT_APP_BACKEND_URL +`/${selectedReport.document}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className='document-link'

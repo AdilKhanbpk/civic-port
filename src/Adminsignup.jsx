@@ -18,7 +18,8 @@ const Adminsignup = () => {
   useEffect(() => {
     const fetchtehsils = async() => {
       try{
-      const response = await axios.get('http://localhost:4000/api/gettehsils');
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:4000';
+      const response = await axios.get(backendUrl + '/api/gettehsils');
       settehsils(response.data)
     } catch(error){
          console.error('Error Fetching tehsils' , error);
@@ -40,7 +41,7 @@ fetchtehsils();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/adminsignup', formData);
+      const response = await axios.post(process.env.REACT_APP_BACKEND_URL + '/adminsignup', formData);
       console.log('Signup Successful', response.data);
 
       if (response.status === 201) {

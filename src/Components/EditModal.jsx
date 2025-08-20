@@ -48,7 +48,7 @@ const EditModal = ({ show, onClose, report }) => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      await axios.put(`http://localhost:4000/reports/${report.id}`, {
+      await axios.put(process.env.REACT_APP_BACKEND_URL +`/reports/${report.id}`, {
         status,
         schedule,
       });
@@ -83,7 +83,7 @@ const EditModal = ({ show, onClose, report }) => {
         <div className="imag2">
           {report.image ? (
             <img
-              src={`http://localhost:4000/${report.image}`}
+              src={process.env.REACT_APP_BACKEND_URL +`/${report.image}`}
               alt="Request"
             />
           ) : (
